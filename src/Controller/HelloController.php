@@ -26,19 +26,24 @@ class HelloController extends AbstractController
 
         $foo2 = new ComplexObject('toto');
 
-        $content = $twig->render('Advert/index.html.twig', ['name' => $name
+        $content = $twig->render('index.html.twig',
+            [
+                'name' => $name
             . ' (' . $foo1->getFoo() . ')'
             . ' (' . $foo2->getFoo() . ')'
-            . ' [' .__METHOD__ . ']']);
+            . ' [' .__METHOD__ . ']'
+            ]
+        );
 
-        return new Response($content);
+        $response = new Response($content);
+
+        /*$response->setStatusCode(Response::HTTP_OK);
+        $response->headers->set('Content-Type', 'text/html');*/
+
+        return $response;
     }
 
-    /**
-     * Page d'accès à un article
-     *
-     * @Route("/article/{postId<\d+>}", name="article")
-     */
+    // without annotation, see config/routes.yaml
     public function showBlogPost($postId = 1)
     {
 
