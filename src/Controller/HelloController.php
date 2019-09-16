@@ -24,13 +24,15 @@ class HelloController extends AbstractController
        
         $name = $request->get('name');
 
-        $foo2 = new ComplexObject('toto');
+        $foo2 = new ComplexObject('toto', $_ENV['APP_ENV']);
 
         $content = $twig->render('index.html.twig',
             [
                 'name' => $name
             . ' (' . $foo1->getFoo() . ')'
+            . ' {' . $foo1->getEnv() . '}'
             . ' (' . $foo2->getFoo() . ')'
+            . ' {' . $foo2->getEnv() . '}'
             . ' [' .__METHOD__ . ']'
             ]
         );

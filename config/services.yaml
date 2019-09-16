@@ -29,3 +29,4 @@ services:
     App\Services\ComplexObject:
         arguments:
             $foo: '%env(FOO)%'
+            $env: '%env(APP_ENV)%'            
