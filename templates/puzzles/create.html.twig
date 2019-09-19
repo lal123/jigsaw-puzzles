@@ -1,0 +1,49 @@
+{# /templates/puzzles/create.html.twig #}
+<html>
+    <head>
+        {% block stylesheets %}
+            {# 'app' must match the first argument to addEntry() in webpack.config.js #}
+            {{ encore_entry_link_tags('app') }}
+
+            <!-- Renders a link tag (if your module requires any CSS)
+                 <link rel="stylesheet" href="/build/app.css"> -->
+        {% endblock %}
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                {{ form_start(form, {
+                    'attr': {
+                        'novalidate': 'novalidate',
+                        'class': 'col-lg-5' 
+                        }
+                    })
+                }}
+
+                    {{ form_row(form.title) }}
+
+                    <button type="submit" class="btn btn-primary">Créer</button>
+                {{ form_end(form) }}
+            </div>
+        </div>
+        <div class="container">
+            <ul>
+            {% for puzzle in puzzles %}
+                <li>
+                    {{ puzzle.title }}
+                    | <a href="{{ path('app_puzzles_edit', {id: puzzle.id}, false) }}">Edit</a>
+                    | <a href="{{ path('app_puzzles_delete', {id: puzzle.id}, false) }}">Delete</a>
+                </li>
+            {% endfor %}
+            </ul>
+        </div>
+        {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
+
+            <!-- Renders app.js & a webpack runtime.js file
+                <script src="/build/runtime.js"></script>
+                <script src="/build/app.js"></script> -->
+        {% endblock %}
+    </body>
+</html>

@@ -1,31 +1,29 @@
 <?php 
-// src/Form/ArticleType.php
+// src/Form/PuzzleType.php
 namespace App\Form;
 
-use App\Entity\Article;
+use App\Entity\Puzzle;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
-class ArticleType extends AbstractType
+class PuzzleType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('title', null, [
-                'help' => "Le titre de l'article, utilisé dans l'url",
+                'help' => "Le titre du puzzle",
             ])
-            ->add('content', TextareaType::class)
-            ->add('author', TextType::class)
         ;
     }
     
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Article::class,
+            'data_class' => Puzzle::class,
         ]);
     }
 }
