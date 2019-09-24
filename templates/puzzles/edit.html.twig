@@ -1,12 +1,12 @@
-{# /templates/puzzles/create.html.twig #}
+{# /templates/puzzles/edit.html.twig #}
 
 {% extends 'base.html.twig' %}
 
-{% block title %}Create a Puzzle{% endblock %}
+{% block title %}Edit a Puzzle{% endblock %}
 
 {% block body %}
         <div class="container">
-            <h1>Création</h1>
+            <h1>Mise à jour</h1>
         </div>
         <div class="container">
             <div class="row">
@@ -20,7 +20,7 @@
 
                     {{ form_row(form.title) }}
 
-                    <button type="submit" class="btn btn-primary">Créer</button>
+                    <button type="submit" class="btn btn-primary">Mettre à jour</button>
                 {{ form_end(form) }}
             </div>
         </div>

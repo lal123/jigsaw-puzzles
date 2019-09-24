@@ -1,0 +1,48 @@
+{# /templates/puzzles/list.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Puzzles List{% endblock %}
+
+{% block body %}
+        <div class="container">
+            <h1>Liste</h1>
+        </div>
+        <div class="container">
+            <ul>
+            {% for puzzle in puzzles %}
+                <li>
+                    {{ puzzle.title }}
+                    | <a href="{{ path('app_puzzles_edit', {id: puzzle.id}, false) }}">Edit</a>
+                    | <a href="{{ path('app_puzzles_delete', {id: puzzle.id}, false) }}">Delete</a>
+                </li>
+            {% endfor %}
+            </ul>
+        </div>
+        <div class="container">
+            <a href="{{ path('app_puzzles_create', {}, false) }}">Create</a>
+        </div>
+
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="{{ 13 }}">
+    Modal Test
+</button>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Demo</h4>
+            </div>
+            <div class="modal-body">
+                Body modal
+                <input type="text" name="id" class="modal-body input"/>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

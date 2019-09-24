@@ -11,6 +11,20 @@ use App\Entity\Puzzle;
 class PuzzlesController extends AbstractController
 {
     /**
+     * @Route("/puzzles")
+     */
+    public function list(Request $request)
+    {
+        $repository = $this->getDoctrine()->getRepository(Puzzle::class);
+
+        $puzzles = $repository->findAll();
+
+        return $this->render('puzzles/list.html.twig', array(
+            'puzzles' => $puzzles,
+        ));
+    }
+
+    /**
      * @Route("/puzzles/create")
      */
     public function create(Request $request)
@@ -27,15 +41,12 @@ class PuzzlesController extends AbstractController
             
             $em->persist($article);
             $em->flush();
+
+            return $this->redirectToRoute('app_puzzles_list');
         }
-
-        $repository = $this->getDoctrine()->getRepository(Puzzle::class);
-
-        $puzzles = $repository->findAll();
 
         return $this->render('puzzles/create.html.twig', array(
             'form' => $form->createView(),
-            'puzzles' => $puzzles,
         ));
     }
 
@@ -50,15 +61,12 @@ class PuzzlesController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('app_puzzles_list');
         }
 
-        $repository = $this->getDoctrine()->getRepository(Puzzle::class);
-
-        $puzzles = $repository->findAll();
-
-        return $this->render('puzzles/create.html.twig', array(
+        return $this->render('puzzles/edit.html.twig', array(
             'form' => $form->createView(),
-            'puzzles' => $puzzles,
         ));
     }
 
@@ -72,6 +80,6 @@ class PuzzlesController extends AbstractController
         $em->remove($puzzle);
         $em->flush();
 
-        return $this->redirectToRoute('app_puzzles_create');
+        return $this->redirectToRoute('app_puzzles_list');
     }
 }
