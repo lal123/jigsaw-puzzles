@@ -13,7 +13,17 @@ const $ = require('jquery');
 // the bootstrap module doesn't export/return anything
 require('bootstrap');
 
-// Need jQuery? Install it with "yarn add jquery", then uncomment to require it.
-// const $ = require('jquery');
 
-console.log('Hello Webpack Encore! Edit me in assets/js/app.js');
+$(document).ready(function () {
+    $('.puzzle_edit_modal').click(function () {
+        $('#modal-title').html("Edit a Puzzle");
+        $.ajax({
+            type: 'post',
+            url: this.href,
+            success: function (data) {
+                $('#modal-body').html(data);
+                $('#puzzleEditModal').modal("show");
+            }
+        });
+    });
+});

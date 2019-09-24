@@ -71,6 +71,28 @@ class PuzzlesController extends AbstractController
     }
 
     /**
+     * @Route("/puzzles/edit_modal/{id<\d+>}")
+     */
+    public function edit_modal(Request $request, Puzzle $puzzle)
+    {
+        $form = $this->createForm(PuzzleType::class, $puzzle, [
+            'action' => $request->getUri()
+        ]);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('app_puzzles_list');
+        }
+
+        return $this->render('puzzles/edit_modal.html.twig', array(
+            'form' => $form->createView(),
+        ));
+    }
+
+    /**
      * @Route("/puzzles/delete/{id<\d+>}", methods={"GET", "POST"})
      */
     public function delete(Request $request, Puzzle $puzzle)

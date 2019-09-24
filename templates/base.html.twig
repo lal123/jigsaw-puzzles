@@ -6,8 +6,7 @@
         <title>{% block title %}Welcome!{% endblock %}</title>
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
-            {{ encore_entry_link_tags('scss1') }}
-	        <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"> -->
+            {{ encore_entry_link_tags('bst') }}
         {% endblock %}
         {% block javascripts %}
             {{ encore_entry_script_tags('app') }}
@@ -15,5 +14,6 @@
     </head>
     <body>
         {% block body %}{% endblock %}
+		{% block editPuzzle %}{%endblock%}
     </body>
 </html>
