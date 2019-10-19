@@ -20,6 +20,24 @@ DirectoryIndex index.php
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
+    RewriteCond %{HTTP_HOST} ^jeu-de-puzzle\.test$ [NC]
+    RewriteRule ^(.*)$ http://www.jeu-de-puzzle.test/$1 [R=301,L]
+
+    RewriteCond %{HTTP_HOST} ^jigsaw-puzzles\.test$ [NC]
+    RewriteRule ^(.*)$ http://www.jigsaw-puzzles.test/$1 [R=301,L]
+
+    RewriteCond %{HTTP_HOST} ^jeu-de-puzzle\.online$ [NC]
+    RewriteRule ^(.*)$ http://www.jeu-de-puzzle.online/$1 [R=301,L]
+
+    RewriteCond %{HTTP_HOST} ^jigsaw-puzzles\.online$ [NC]
+    RewriteRule ^(.*)$ http://www.jigsaw-puzzles.online/$1 [R=301,L]
+
+    RewriteCond %{HTTP_HOST} ^jeu-de-puzzle\.net$ [NC]
+    RewriteRule ^(.*)$ http://www.jeu-de-puzzle.net/$1 [R=301,L]
+
+    RewriteCond %{HTTP_HOST} ^jigsaw-puzzles\.net$ [NC]
+    RewriteRule ^(.*)$ http://www.jigsaw-puzzles.net/$1 [R=301,L]
+
     # Determine the RewriteBase automatically and set it as environment variable.
     # If you are using Apache aliases to do mass virtual hosting or installed the
     # project in a subdirectory, the base path will be prepended to allow proper

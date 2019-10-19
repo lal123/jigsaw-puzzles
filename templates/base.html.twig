@@ -12,9 +12,14 @@
         {% endblock %}
     </head>
     <body>
-        <img src="{{ asset('build/img/logo.png') }}">
+        <img src="{{ asset('build/img/logo_' ~ app.request.locale ~ '.png') }}" alt="" />
+        {% for lang, domain_settings in domain_list %}
+            {% if lang != app.request.locale %}
+                <a href="{{ app.request.uri|translateURI(domain_settings.domain_name) }}">{{ domain_settings.label }}</a>
+            {% endif %}
+        {% endfor %}
         {% block menu %}
-        	  <a href="{{ path('app_puzzles_list') }}">Puzzles List</a>
+        	  <a href="{{ path('app_puzzles_list') }}">{% trans %}Puzzles List{% endtrans %}</a>
         	| <a href="{{ path('app_user_create_account') }}">Create an account</a>
         {% endblock %}
         {% block body %}{% endblock %}

@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Form\PuzzleType;
 use App\Entity\Puzzle;
+use App\EventListener\RequestListener;
 
 class PuzzlesController extends AbstractController
 {

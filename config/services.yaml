@@ -5,6 +5,10 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
 
+twig:
+    globals:
+        domain_list: {en: {domain_name: 'jigsaw-puzzles', label: 'English Version'}, fr: {domain_name: 'jeu-de-puzzle', label: 'Version Française'}}
+
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -30,3 +34,7 @@ services:
         arguments:
             $foo: '%env(FOO)%'
             $env: '%env(APP_ENV)%'            
+
+    App\EventListener\RequestListener:
+        tags:
+            - { name: kernel.request_listener, event: kernel.request }
