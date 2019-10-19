@@ -1,0 +1,43 @@
+{# /templates/puzzles/create.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Create an account{% endblock %}
+
+{% block body %}
+        <div class="container">
+            <h1>Création d'un compte utilisateur</h1>
+        </div>
+        <div class="container">
+            {# pass a string argument to get only the messages of that type #}
+            {% for message in app.flashes('notice') %}
+                <div class="alert alert-notice">
+                    {{ message }}
+                </div>
+            {% endfor %}
+
+            {# pass an array argument to get the messages of those types  #}
+            {% for label, messages in app.flashes(['warning', 'error']) %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ label }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+            <div class="row">
+                {{ form_start(form, {
+                    'attr': {
+                        'novalidate': 'novalidate',
+                        'class': 'col-lg-5' 
+                        }
+                    })
+                }}
+
+                    {{ form_row(form.name) }}
+
+                    <button type="submit" class="btn btn-primary">Créer</button>
+
+                {{ form_end(form) }}
+            </div>
+        </div>
+{% endblock %}
