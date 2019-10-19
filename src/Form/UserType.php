@@ -14,8 +14,11 @@ class UserType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', null, [
+            ->add('name', TextType::class, [
                 'help' => "Votre pseudo de jeu",
+                'attr' => [
+                    'maxlength' => 24
+                ]
             ])
         ;
     }
