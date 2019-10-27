@@ -22,6 +22,16 @@ class AppExtension extends AbstractExtension
         $e[count($e) - 2] = $domain;
 
         $uri = $p['scheme'] . '://' . join('.', $e) . $p['path'];
+
+        if(preg_match('/jigsaw-puzzles/', $uri)) {
+            $uri = preg_replace('/vos-puzzles/', 'your-puzzles', $uri);
+            $uri = preg_replace('/creer-un-puzzle/', 'create-a-puzzle', $uri);
+        }
+        if(preg_match('/jeu-de-puzzle/', $uri)) {
+            $uri = preg_replace('/your-puzzles/', 'vos-puzzles', $uri);
+            $uri = preg_replace('/create-a-puzzle/', 'creer-un-puzzle', $uri);
+        }
+
         if(isset($p['query'])) {
             $uri .= '?' . $p['query'];
         }

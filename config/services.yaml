@@ -4,6 +4,7 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
+    domain_list: {en: {domain_name: 'jigsaw-puzzles%env(DOMAIN_EXT)%', label: 'English Version'}, fr: {domain_name: 'jeu-de-puzzle%env(DOMAIN_EXT)%', label: 'Version Française'}}
 
 twig:
     globals:
@@ -35,6 +36,10 @@ services:
             $foo: '%env(FOO)%'
             $env: '%env(APP_ENV)%'            
 
-    App\EventListener\RequestListener:
-        tags:
-            - { name: kernel.request_listener, event: kernel.request }
+    App\Services\UrlTranslator:
+        arguments:
+            $domain_list: {en: {domain_name: 'jigsaw-puzzles%env(DOMAIN_EXT)%', label: 'English Version'}, fr: {domain_name: 'jeu-de-puzzle%env(DOMAIN_EXT)%', label: 'Version Française'}}
+
+#    App\EventListener\RequestListener:
+#        tags:
+#            - { name: kernel.request_listener, event: kernel.request }

@@ -13,7 +13,6 @@ const $ = require('jquery');
 // the bootstrap module doesn't export/return anything
 require('bootstrap');
 
-
 $(document).ready(function () {
     $('.puzzle_edit_modal').click(function () {
         $('#modal-title').html("Edit a Puzzle");
@@ -26,4 +25,20 @@ $(document).ready(function () {
             }
         });
     });
+});
+
+$(window).scroll(function(){
+    var scroll = $(window).scrollTop();
+    console.log('scroll', scroll);
+    if(scroll > 100){
+        $('.navbar-brand.main').show();
+        $('.navbar-brand.secondary').hide();
+        $('#top-navbar').addClass('fixed-top');
+        $('#central-content').addClass('shifted');
+    } else{
+        $('.navbar-brand.main').hide();
+        $('.navbar-brand.secondary').show();
+        $('#top-navbar').removeClass('fixed-top');
+        $('#central-content').removeClass('shifted');
+    }
 });

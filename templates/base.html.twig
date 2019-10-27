@@ -2,8 +2,10 @@
 <html>
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{% block title %}Welcome!{% endblock %}</title>
         {% block stylesheets %}
+            {{ encore_entry_link_tags('fnt') }}
             {{ encore_entry_link_tags('app') }}
             {{ encore_entry_link_tags('bst') }}
         {% endblock %}
@@ -12,17 +14,74 @@
         {% endblock %}
     </head>
     <body>
-        <img src="{{ asset('build/img/logo_' ~ app.request.locale ~ '.png') }}" alt="" />
-        {% for lang, domain_settings in domain_list %}
-            {% if lang != app.request.locale %}
-                <a href="{{ app.request.uri|translateURI(domain_settings.domain_name) }}">{{ domain_settings.label }}</a>
-            {% endif %}
-        {% endfor %}
-        {% block menu %}
-        	  <a href="{{ path('app_puzzles_list') }}">{% trans %}Puzzles List{% endtrans %}</a>
-        	| <a href="{{ path('app_user_create_account') }}">Create an account</a>
-        {% endblock %}
-        {% block body %}{% endblock %}
-		{% block editPuzzle %}{%endblock%}
+        <a name="top"></a>
+        <div style="height: 100px">
+            <!-- <img src="{{ asset('build/img/logo_' ~ app.request.locale ~ '.png') }}" alt="" /> -->
+            <div class="site-title"><a href="/">{% trans %}Main Title{% endtrans %}</a></div>
+        </div>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light" id="top-navbar">
+          <a class="navbar-brand main" href="/">{% trans %}Jigsaw-Puzzles{% endtrans %}</a>
+          <span class="navbar-brand secondary"></span>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item">
+                <a class="nav-link" href="{{ path('homepage') }}">{% trans %}Home{% endtrans %} <span class="sr-only">(current)</span></a>
+              </li>
+              <li class="nav-item{% if path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) == path('your_puzzles_list') %} active{% endif %}">
+                <a class="nav-link" href="{{ path('your_puzzles_list') }}">{% trans %}Your Puzzles{% endtrans %}</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Dropdown
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="#">Action</a>
+                  <a class="dropdown-item" href="#">Another action</a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="#">Something else here</a>
+                </div>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link disabled" href="#">Disabled</a>
+              </li>
+            </ul>
+            <!--<form class="form-inline my-2 my-lg-0">
+              <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+              <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>-->
+            <ul class="navbar-nav ml-auto">
+              <li class="nav-item{% if path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) == path('app_user_create_account') %} active{% endif %}">
+                <a class="nav-link" href="{{ path('app_user_create_account') }}"><span class="glyphicon glyphicon-user"></span>{% trans %}Create an account{% endtrans %}</a>
+              </li>
+          </ul>
+          </div>
+        </nav>
+        <div class="container" id="central-content">
+            {% for lang, domain_settings in locale_versions %}
+                {% if lang != app.request.locale %}
+                    <a href="{{ domain_settings.url }}">{{ domain_settings.label }}</a>
+                {% endif %}
+            {% endfor %}
+            {% block menu %}
+            {% endblock %}
+            {% block body %}{% endblock %}
+    		{% block editPuzzle %}{%endblock%}
+        </div>
+        <nav class="navbar navbar-expand fixed-bottom navbar-light bg-light" id="bot-navbar">
+          <div class="mx-auto justify-content-md-center">
+            <ul class="navbar-nav col-md-auto">
+              <li class="nav-item active">
+                <a class="nav-link" href="#">Terms of Use</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Legal Notice</a>
+              </li>
+            </ul>
+          </div>
+        </nav>
     </body>
 </html>

@@ -26,6 +26,7 @@ Encore
     .addEntry('app', './assets/js/app.js')
     //.addEntry('page1', './assets/js/page1.js')
     //.addEntry('page2', './assets/js/page2.js')
+    .addEntry('fnt', './assets/css/fonts.css')
     .addEntry('bst', './assets/css/global.scss')
     
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
@@ -46,13 +47,11 @@ Encore
 
          // only copy files matching this pattern
          //pattern: /\.(png|jpg|jpeg)$/
-     })    /*
-     * FEATURE CONFIG
-     *
-     * Enable & configure other features below. For a full
-     * list of features, see:
-     * https://symfony.com/doc/current/frontend.html#adding-more-features
-     */
+     })
+    .copyFiles({
+         from: './assets/fonts',
+         to: 'fonts/[path][name].[ext]',
+     })
     .cleanupOutputBeforeBuild()
     .enableBuildNotifications()
     .enableSourceMaps(!Encore.isProduction())

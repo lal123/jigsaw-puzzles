@@ -13,12 +13,13 @@ use Twig\Environment;
 class HelloController extends AbstractController
 {
     /**
-     * Page d'accueil
+     * Homepage
      *
-     * @Route("/", name="accueil")
+     * @Route("/", name="homepage")
      */
-    public function home(ComplexObject $foo1, Environment $twig)
+    public function home(Request $request, ComplexObject $foo1, Environment $twig)
     {
+        return $this->redirectToRoute('your_puzzles_list');
 
         $request = Request::createFromGlobals();
        
