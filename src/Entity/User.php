@@ -3,44 +3,24 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use FOS\UserBundle\Model\User as BaseUser;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @ORM\Table(name="users")
  */
-class User
+class User extends BaseUser
 {
     /**
     * @ORM\Id()
     * @ORM\GeneratedValue(strategy="AUTO")
     * @ORM\Column(type="integer")
     */
-    private $id;
-
-    /**
-    * @ORM\Column(type="string")
-    */
-    private $name;
+    protected $id;
 
     public function __construct()
     {
-
+        parent::__construct();
     }
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): self
-    {
-        $this->name = $name;
-
-        return $this;
-    }
 }

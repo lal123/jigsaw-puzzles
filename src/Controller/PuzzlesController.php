@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use App\Form\PuzzleType;
 use App\Entity\Puzzle;
-use App\EventListener\RequestListener;
+//use App\EventListener\RequestListener;
 use App\Services\UrlTranslator;
 
 class PuzzlesController extends AbstractController

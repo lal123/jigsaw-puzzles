@@ -2,11 +2,11 @@
 
 {% extends 'base.html.twig' %}
 
-{% block title %}Create an account{% endblock %}
+{% block title %}{% trans %}Sign in{% endtrans %}{% endblock %}
 
 {% block body %}
         <div class="container">
-            <h2>{% trans %}Create an account{% endtrans %}</h2>
+            <h2>{% trans %}Sign in{% endtrans %}</h2>
         </div>
         <div class="container">
             {# pass a string argument to get only the messages of that type #}
@@ -27,15 +27,12 @@
             <div class="row">
                 {{ form_start(form, {
                     'attr': {
-                        'novalidate': 'novalidate',
                         'class': 'col-lg-5' 
                         }
                     })
                 }}
 
-                    {{ form_row(form.name) }}
-
-                    <button type="submit" class="btn btn-primary">Créer</button>
+                    {#{ form_row(form.name) }#}
 
                 {{ form_end(form) }}
             </div>

@@ -4,4 +4,11 @@ Main Title: Jeu-de-Puzzle
 Home: Accueil
 Your Puzzles: Vos Puzzles
 Create an account: Créer un compte
+Sign in: Se connecter
 Create a puzzle: Créer un puzzle
+help.characters: 4 à 24 caractères
+player.label.name: Pseudo
+player.label.password: Mot de passe
+player.label.create: Créer
+player.label.login: Se connecter
+Anonymous: Anonyme
