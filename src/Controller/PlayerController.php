@@ -22,6 +22,8 @@ class PlayerController extends AbstractController
      */
     public function create_account(Request $request, UrlGeneratorInterface $urlGenerator, UrlTranslator $urlTranslator, TranslatorInterface $translator)
     {
+        $session = $request->getSession();
+
         $player = new Player();
         $player->setName($translator->trans('Anonymous'));
 
@@ -36,7 +38,8 @@ class PlayerController extends AbstractController
 
             if(!$repository->existsPlayer($player->getName())) 
             {
-                
+                $session->set('player', $player);
+            
                 $em->persist($player);
                 $em->flush();
 
@@ -59,12 +62,14 @@ class PlayerController extends AbstractController
 
     /**
      * @Route({
-     *      "en": "/player/sign_in",
+     *      "en": "/player/sign-in",
      *      "fr": "/joueur/se-connecter"
      * }, name="player_sign_in")
      */
     public function sign_in(Request $request, UrlGeneratorInterface $urlGenerator, UrlTranslator $urlTranslator, TranslatorInterface $translator)
     {
+        $session = $request->getSession();
+
         $player = new Player();
         $player->setName($translator->trans('Anonymous'));
 
@@ -73,12 +78,15 @@ class PlayerController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            
             $em = $this->getDoctrine()->getManager();
             
             $repository = $this->getDoctrine()->getRepository(Player::class);
 
             if($repository->existsPlayer($player->getName())) 
             {
+                $session->set('player', $player);
+            
                 return $this->redirectToRoute('homepage');
             }
             else
@@ -94,5 +102,20 @@ class PlayerController extends AbstractController
             'form' => $form->createView(),
             'locale_versions' => $urlTranslator->translate($request, $urlGenerator)
         ));
+    }
+
+    /**
+     * @Route({
+     *      "en": "/player/sign-out",
+     *      "fr": "/joueur/se-deconnecter"
+     * }, name="player_sign_out")
+     */
+    public function sign_out(Request $request)
+    {
+        $session = $request->getSession();
+
+        $session->clear();
+
+        return $this->redirectToRoute('homepage');
     }
 }

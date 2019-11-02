@@ -21,6 +21,8 @@ class PuzzlesController extends AbstractController
      */
     public function list(Request $request, UrlGeneratorInterface $urlGenerator, UrlTranslator $urlTranslator)
     {
+        $session = $request->getSession();
+
         $repository = $this->getDoctrine()->getRepository(Puzzle::class);
 
         $puzzles = $repository->findAll();
@@ -66,7 +68,7 @@ class PuzzlesController extends AbstractController
     /**
      * @Route("/puzzles/edit/{id<\d+>}")
      */
-    public function edit(Request $request, Puzzle $puzzle)
+    public function edit(Request $request, Puzzle $puzzle, UrlGeneratorInterface $urlGenerator, UrlTranslator $urlTranslator)
     {
         $form = $this->createForm(PuzzleType::class, $puzzle);
 
@@ -80,13 +82,14 @@ class PuzzlesController extends AbstractController
 
         return $this->render('puzzles/edit.html.twig', array(
             'form' => $form->createView(),
+            'locale_versions' => $urlTranslator->translate($request, $urlGenerator)
         ));
     }
 
     /**
      * @Route("/puzzles/edit_modal/{id<\d+>}")
      */
-    public function edit_modal(Request $request, Puzzle $puzzle)
+    public function edit_modal(Request $request, Puzzle $puzzle, UrlGeneratorInterface $urlGenerator, UrlTranslator $urlTranslator)
     {
         $form = $this->createForm(PuzzleType::class, $puzzle, [
             'action' => $request->getUri()
@@ -102,6 +105,7 @@ class PuzzlesController extends AbstractController
 
         return $this->render('puzzles/edit_modal.html.twig', array(
             'form' => $form->createView(),
+            'locale_versions' => $urlTranslator->translate($request, $urlGenerator)
         ));
     }
 

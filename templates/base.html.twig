@@ -76,8 +76,9 @@
           </div>
         </nav>
         <div class="container" id="central-content">
-{% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-Hello {{ app.user.username }}
+{% set player = app.session.get('player') %}
+{% if  player != null %}
+Hello {{ player.name }}
 {% endif %}
             {% block menu %}
             {% endblock %}
