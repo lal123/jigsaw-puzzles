@@ -1,27 +1,42 @@
-{# /templates/puzzles/list.html.twig #}
+{# /templates/puzzles/create.html.twig #}
 
 {% extends 'base.html.twig' %}
 
-{% block title %}Puzzles List{% endblock %}
+{% block title %}{% trans %}player.update.title{% endtrans %}{% endblock %}
 
 {% block body %}
         <div class="container">
-            <h2>{% trans %}Your Puzzles{% endtrans %}</h2>
+            <h2>{% trans %}player.update.title{% endtrans %}</h2>
         </div>
         <div class="container">
-            <ul>
-            {% for puzzle in puzzles %}
-                <li>
-                    {{ puzzle.title }}
-                    | <a href="{{ path('your_puzzles_edit', {id: puzzle.id}, false) }}">Edit</a>
-                    | <a class="puzzle_edit_modal" href="{{ path('your_puzzles_edit_modal', {id: puzzle.id}, false) }}" data-toggle="modal">Edit (modal)</a>
-                    | <a href="{{ path('app_puzzles_delete', {id: puzzle.id}, false) }}">Delete</a>
-                </li>
+            {# pass a string argument to get only the messages of that type #}
+            {% for message in app.flashes('notice') %}
+                <div class="alert alert-notice">
+                    {{ message }}
+                </div>
             {% endfor %}
-            </ul>
-        </div>
-        <div class="container">
-            <a href="{{ path('your_puzzles_create', {}, false) }}">{% trans %}Create a puzzle{% endtrans %}</a>
+
+            {# pass an array argument to get the messages of those types  #}
+            {% for label, messages in app.flashes(['warning', 'error']) %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ label }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+            <div class="row">
+                {{ form_start(form, {
+                        'attr': {
+                            'invalidate': 'invalidate',
+                            'class': 'col-lg-5' 
+                        }
+                    })
+                }}
+
+                    {#{ form_row(form.name) }#}
+
+                {{ form_end(form) }}
+            </div>
         </div>
         <div class="container">
             <br />
@@ -298,20 +313,4 @@
             <br />
             <a href="#top">Go to top</a>
         </div>
-
-<div class="modal fade" id="puzzleEditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="modal-title">Demo</h4>
-            </div>
-            <div id="modal-body"></div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 {% endblock %}

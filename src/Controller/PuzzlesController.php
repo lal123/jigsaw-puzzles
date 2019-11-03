@@ -66,7 +66,10 @@ class PuzzlesController extends AbstractController
     }
 
     /**
-     * @Route("/puzzles/edit/{id<\d+>}")
+     * @Route({
+     *      "en": "/your-puzzles/edit/{id<\d+>}",
+     *      "fr": "/vos-puzzles/editer/{id<\d+>}"
+     * }, name="your_puzzles_edit")
      */
     public function edit(Request $request, Puzzle $puzzle, UrlGeneratorInterface $urlGenerator, UrlTranslator $urlTranslator)
     {
@@ -87,7 +90,10 @@ class PuzzlesController extends AbstractController
     }
 
     /**
-     * @Route("/puzzles/edit_modal/{id<\d+>}")
+     * @Route({
+     *      "en": "/your-puzzles/edit-modal/{id<\d+>}",
+     *      "fr": "/vos-puzzles/editer-modal/{id<\d+>}"
+     * }, name="your_puzzles_edit_modal")
      */
     public function edit_modal(Request $request, Puzzle $puzzle, UrlGeneratorInterface $urlGenerator, UrlTranslator $urlTranslator)
     {

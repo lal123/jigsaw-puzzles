@@ -22,7 +22,10 @@ class UrlTranslator
         $locale_versions = [];
         $domain_list = $this->domain_list;
         foreach ($domain_list as $locale => $settings) {
-            $locale_versions[$locale] = ['url'=> $request->getScheme() . '://' . $settings['domain_name'] . $urlGenerator->generate($request->attributes->get('_route'), ['_locale' => $locale]), 'label'=> $settings['label']];
+            //var_dump($request->attributes);die();
+            $params = $request->get('_route_params');
+            $params['_locale'] = $locale;
+            $locale_versions[$locale] = ['url'=> $request->getScheme() . '://' . $settings['domain_name'] . $urlGenerator->generate($request->attributes->get('_route'), $params), 'label'=> $settings['label']];
         }
         return $locale_versions;
     }

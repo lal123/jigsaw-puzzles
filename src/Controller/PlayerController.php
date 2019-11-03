@@ -8,6 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use App\Form\PlayerCreateType;
+use App\Form\PlayerUpdateType;
 use App\Form\PlayerLoginType;
 use App\Entity\Player;
 //use App\EventListener\RequestListener;
@@ -18,11 +19,18 @@ class PlayerController extends AbstractController
     /**
      * @Route({
      *      "en": "/player/create-an-account",
-     *      "fr": "/joueur/creer-un-compte"}, name="player_create_account")
+     *      "fr": "/joueur/creer-un-compte"
+     * }, name="player_create_account")
      */
     public function create_account(Request $request, UrlGeneratorInterface $urlGenerator, UrlTranslator $urlTranslator, TranslatorInterface $translator)
     {
         $session = $request->getSession();
+
+        $player = $session->get('player');
+
+        if(null !== $player) {
+            return $this->redirectToRoute('player_update_account');
+        }
 
         $player = new Player();
         $player->setName($translator->trans('Anonymous'));
@@ -62,6 +70,60 @@ class PlayerController extends AbstractController
 
     /**
      * @Route({
+     *      "en": "/player/your-account",
+     *      "fr": "/joueur/votre-compte"
+     * }, name="player_update_account")
+     */
+    public function update_account(Request $request, UrlGeneratorInterface $urlGenerator, UrlTranslator $urlTranslator, TranslatorInterface $translator)
+    {
+        $session = $request->getSession();
+
+        $player = $session->get('player');
+
+        if(null === $player) {
+            return $this->redirectToRoute('player_create_account');
+        }
+
+        $form = $this->createForm(PlayerUpdateType::class, $player);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            
+            $repository = $this->getDoctrine()->getRepository(Player::class);
+
+            if(!$repository->existsPlayer($player->getName(), $player->getId())) 
+            {
+                $em->merge($player);
+                $em->flush();
+
+                $password = $form->get('password')->getData();
+
+                $session->set('player', $player);
+
+                $this->addFlash(
+                    'notice',
+                    "Updated! (pw: {$password})"
+                );
+            }
+            else
+            {
+                $this->addFlash(
+                    'error',
+                    'Player name already exists!'
+                );
+            }
+        }
+
+        return $this->render('player/update.html.twig', array(
+            'form' => $form->createView(),
+            'locale_versions' => $urlTranslator->translate($request, $urlGenerator)
+        ));
+    }
+
+    /**
+     * @Route({
      *      "en": "/player/sign-in",
      *      "fr": "/joueur/se-connecter"
      * }, name="player_sign_in")
@@ -83,9 +145,11 @@ class PlayerController extends AbstractController
             
             $repository = $this->getDoctrine()->getRepository(Player::class);
 
-            if($repository->existsPlayer($player->getName())) 
+            $player_obj = $repository->existsPlayer($player->getName());
+
+            if($player_obj) 
             {
-                $session->set('player', $player);
+                $session->set('player', $player_obj[0]);
             
                 return $this->redirectToRoute('homepage');
             }

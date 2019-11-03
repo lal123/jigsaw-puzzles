@@ -3,12 +3,16 @@ Main Domain: jigsaw-puzzles
 Main Title: Jigsaw-Puzzles
 Home: Home
 Your Puzzles: Your Puzzles
-Create an account: Create an account
-Sign in: Sign in
 Create a puzzle: Create a puzzle
+puzzle.edit.title: Editing the puzzle
 help.characters: 4 to 24 characters
+player.create.title: Create an account
 player.label.name: Nickname
 player.label.password: Password
 player.label.create: Create
 player.label.login: Sign in
+player.label.update: Update
+player.update.title: Your account
+player.sign_in.title: Sign in
+player.sign_out.title: Sign out
 Anonymous: Anonymous

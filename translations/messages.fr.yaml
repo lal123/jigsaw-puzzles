@@ -3,12 +3,16 @@ Main Domain: jeu-de-puzzle
 Main Title: Jeu-de-Puzzle
 Home: Accueil
 Your Puzzles: Vos Puzzles
-Create an account: Créer un compte
-Sign in: Se connecter
 Create a puzzle: Créer un puzzle
+puzzle.edit.title: Editer le puzzle
 help.characters: 4 à 24 caractères
+player.create.title: Créer un compte
 player.label.name: Pseudo
 player.label.password: Mot de passe
 player.label.create: Créer
 player.label.login: Se connecter
+player.label.update: Mettre à jour
+player.update.title: Votre compte
+player.sign_in.title: Se connecter
+player.sign_out.title: Se déconnecter
 Anonymous: Anonyme

@@ -18,11 +18,11 @@ class LocaleListener implements EventSubscriberInterface
         */
         $host = $request->getHost();
         $locale = 'en';
-        if (preg_match('/jeu-de-puzzle/', $host)) {
+        if (preg_match('/jeu/', $host)) {
             $locale = 'fr';
         }
         $request->setLocale($locale);
-        $request->getSession()->set('a', 'b');
+        //echo $locale;die();
     }
 
     public static function getSubscribedEvents() {
