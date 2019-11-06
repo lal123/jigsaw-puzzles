@@ -6,9 +6,11 @@ Your Puzzles: Vos Puzzles
 Create a puzzle: Créer un puzzle
 puzzle.edit.title: Editer le puzzle
 help.characters: 4 à 24 caractères
+help.email: Fournissez une adresse e-mail valide
 player.create.title: Créer un compte
 player.label.name: Pseudo
 player.label.password: Mot de passe
+player.label.email: E-mail
 player.label.create: Créer
 player.label.login: Se connecter
 player.label.update: Mettre à jour

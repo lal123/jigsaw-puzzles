@@ -8,6 +8,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class PlayerUpdateType extends AbstractType
@@ -18,6 +19,7 @@ class PlayerUpdateType extends AbstractType
             ->add('name', TextType::class, [
                 'label' => 'player.label.name',
                 'help' => 'help.characters',
+                'mapped' => true,
                 'required' => true,
                 'attr' => [
                     'maxlength' => 24
@@ -26,9 +28,19 @@ class PlayerUpdateType extends AbstractType
             ->add('password', PasswordType::class, [
                 'label' => 'player.label.password',
                 'help' => 'help.characters',
-                'required' => true,
+                'mapped' => false,
+                'required' => false,
                 'attr' => [
                     'maxlength' => 24
+                ]
+            ])
+            ->add('email', EmailType::class, [
+                'label' => 'player.label.email',
+                'help' => 'help.email',
+                'mapped' => true,
+                'required' => true,
+                'attr' => [
+                    'maxlength' => 128
                 ]
             ])
             ->add('create', SubmitType::class, [

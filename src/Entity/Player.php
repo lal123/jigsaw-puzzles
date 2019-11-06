@@ -27,6 +27,11 @@ class Player
     */
     private $password;
 
+    /**
+    * @ORM\Column(type="string")
+    */
+    private $email;
+
     public function __construct()
     {
 
@@ -60,4 +65,17 @@ class Player
 
         return $this;
     }
+
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email)
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
 }

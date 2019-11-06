@@ -18,18 +18,24 @@ class PlayerRepository extends ServiceEntityRepository
         return $this->findAll([], ['date' => 'DESC']);
     }
 
-    public function existsPlayer($name, $excluded_id = null)
+    public function getPlayerFromId($id)
     {
-        //return $this->findOneBy(['name' => $name]);
-        $player = $this->createQueryBuilder('u')
+        return $this->findOneBy(['id' => $id]);
+    }
+
+    public function existsPlayer($name)
+    {
+        return $this->findOneBy(['name' => $name]);
+    }
+
+    public function existsPlayerName($name, $excluded_id)
+    {
+        return $this->createQueryBuilder('u')
                     ->where("u.name = ?1")
-                    ->setParameter(1, $name);
-        if(null !== $excluded_id) {
-                    $player = $player->andWhere("u.id != ?2")
-                    ->setParameter(2, $excluded_id);
-        }
-        $player = $player->getQuery();
-        $player = $player->getResult();
-        return $player;
+                    ->andWhere("u.id != ?2")
+                    ->setParameter(1, $name)
+                    ->setParameter(2, $excluded_id)
+                    ->getQuery()
+                    ->getResult();
     }
 }

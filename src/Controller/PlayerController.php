@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Form\FormError;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use App\Form\PlayerCreateType;
 use App\Form\PlayerUpdateType;
@@ -78,40 +79,51 @@ class PlayerController extends AbstractController
     {
         $session = $request->getSession();
 
-        $player = $session->get('player');
-
-        if(null === $player) {
+        if(!$session->has('player')) {
             return $this->redirectToRoute('player_create_account');
         }
+
+        $em = $this->getDoctrine()->getManager();
+        
+        $repository = $this->getDoctrine()->getRepository(Player::class);
+
+        $player = $repository->getPlayerFromId($session->get('player')->getId());
+
+        //var_dump($player);
 
         $form = $this->createForm(PlayerUpdateType::class, $player);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            
-            $repository = $this->getDoctrine()->getRepository(Player::class);
 
-            if(!$repository->existsPlayer($player->getName(), $player->getId())) 
-            {
+            $error = false;
+
+            $password = $form->get('password')->getData();
+
+            if(NULL !== $password) {
+                if(strlen($password) < 4 ) {
+                    $error = true;
+                    $form->get('password')->addError(new FormError('Wrong password'));
+                } else {
+                    $player->setPassword($password);
+                }
+            }
+
+            if($repository->existsPlayerName($player->getName(), $player->getId())) {
+                $error = true;
+                $form->get('name')->addError(new FormError('Player name already exists!'));
+            }
+
+            if($error == false) {
                 $em->merge($player);
                 $em->flush();
-
-                $password = $form->get('password')->getData();
 
                 $session->set('player', $player);
 
                 $this->addFlash(
                     'notice',
                     "Updated! (pw: {$password})"
-                );
-            }
-            else
-            {
-                $this->addFlash(
-                    'error',
-                    'Player name already exists!'
                 );
             }
         }
@@ -149,7 +161,7 @@ class PlayerController extends AbstractController
 
             if($player_obj) 
             {
-                $session->set('player', $player_obj[0]);
+                $session->set('player', $player_obj);
             
                 return $this->redirectToRoute('homepage');
             }
