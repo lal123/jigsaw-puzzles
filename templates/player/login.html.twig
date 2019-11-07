@@ -32,7 +32,11 @@
                     })
                 }}
 
-                    {#{ form_row(form.name) }#}
+                  <div class="checkbox mb-3">
+                        <label>
+                            <input type="checkbox" id="remember_me" name="_remember_me" value="remember_me" checked="checked"> {%trans %}player.label.remember_me{% endtrans %}
+                        </label>
+                  </div>
 
                 {{ form_end(form) }}
             </div>

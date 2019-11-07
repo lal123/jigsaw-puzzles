@@ -11,6 +11,7 @@ player.create.title: Create an account
 player.label.name: Player name
 player.label.password: Password
 player.label.confirm: Confirmation
+player.label.remember_me: Remember me
 player.label.email: Email
 player.label.create: Create
 player.label.login: Sign in
@@ -23,5 +24,6 @@ player.error.name.exists: This player name already exists
 player.error.password.invalid: Invalid password
 player.error.confirm.invalid: Confirmation error
 player.error.email.exists: This email is already used
+player.error.login.invalid: Invalid player name or passwprd
 player.update.success: Your account has been updated
 player.delete.title: Delete account

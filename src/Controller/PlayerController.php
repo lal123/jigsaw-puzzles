@@ -38,7 +38,6 @@ class PlayerController extends AbstractController
         $repository = $this->getDoctrine()->getRepository(Player::class);
 
         $player = new Player();
-        $player->setName($translator->trans('Anonymous'));
 
         $form = $this->createForm(PlayerCreateType::class, $player);
 
@@ -215,12 +214,18 @@ class PlayerController extends AbstractController
             if($player_obj) 
             {
                 $session->set('player', $player_obj);
-            
+                /*
+                $remember_me = $form->get('remember_me')->getData();
+
+                if(true === $remember_me) {
+
+                }
+                */
                 return $this->redirectToRoute('homepage');
             }
             else
             {
-                $this->addFlash('error', 'Player name does no exist!');
+                $this->addFlash('error', $translator->trans('player.error.login.invalid'));
             }
         }
 

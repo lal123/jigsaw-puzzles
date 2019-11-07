@@ -38,8 +38,14 @@
                 {{ form_end(form) }}
             </div>
         </div>
+        <br />
+        <br />
         <div class="container">
-            <a href="{{ path('player_delete_account') }}">{% trans %}player.delete.title{% endtrans %}</a>
+            <div class="row">
+                  <p class="col-lg-5">
+                        <a href="{{ path('player_delete_account') }}" onclick="if(!confirm('Sure?')){ return false; }">{% trans %}player.delete.title{% endtrans %}</a>
+                  </p>
+            </div>
         </div>
         <div class="container">
             <br />

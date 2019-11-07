@@ -57,7 +57,7 @@
             <ul class="navbar-nav ml-auto">
 {% if  player != null %}
               <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user"></span>{{ player.name }}&nbsp;</a>
+                <a class="nav-link dropdown-toggle{% if path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) == path('player_update_account') %} active{% endif %}" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user"></span>{{ player.name }}&nbsp;</a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item{% if path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) == path('player_update_account') %} active{% endif %}" href="{{ path('player_update_account') }}">{% trans %}player.update.title{% endtrans %}</a>
                     <a class="dropdown-item" href="{{ path('player_sign_out') }}"><span class="glyphicon glyphicon-log-out"></span>{% trans %}player.sign_out.title{% endtrans %}</a>

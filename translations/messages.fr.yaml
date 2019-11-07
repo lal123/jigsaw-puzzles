@@ -6,11 +6,12 @@ Your Puzzles: Vos Puzzles
 Create a puzzle: Créer un puzzle
 puzzle.edit.title: Editer le puzzle
 help.characters: 4 à 24 caractères
-help.email: Fournissez une adresse e-mail valide
+help.email: Veuillez indiquer une adresse e-mail valide
 player.create.title: Créer un compte
 player.label.name: Nom de joueur
 player.label.password: Mot de passe
 player.label.confirm: Confirmation
+player.label.remember_me: Se souvenir de moi
 player.label.email: E-mail
 player.label.create: Créer
 player.label.login: Se connecter
@@ -23,5 +24,6 @@ player.error.name.exists: Ce nom de joueur existe déjà
 player.error.password.invalid: Mot de passe invalide
 player.error.confirm.invalid: Erreur de confirmation
 player.error.email.exists: Cet e-mail est déjà utilisé
+player.error.login.invalid: Nom de joueur ou mot de passe invalide
 player.update.success: Votre compte a bien été mis à jour
 player.delete.title: Supprimer le compte
