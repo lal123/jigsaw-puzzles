@@ -28,12 +28,33 @@ class PlayerRepository extends ServiceEntityRepository
         return $this->findOneBy(['name' => $name]);
     }
 
+    public function existsPlayerWithPassword($name, $password)
+    {
+        return $this->findOneBy(['name' => $name, 'password' => $password]);
+    }
+
+    public function existsEmail($email)
+    {
+        return $this->findOneBy(['email' => $email]);
+    }
+
     public function existsPlayerName($name, $excluded_id)
     {
         return $this->createQueryBuilder('u')
                     ->where("u.name = ?1")
                     ->andWhere("u.id != ?2")
                     ->setParameter(1, $name)
+                    ->setParameter(2, $excluded_id)
+                    ->getQuery()
+                    ->getResult();
+    }
+
+    public function existsEmailAddress($email, $excluded_id)
+    {
+        return $this->createQueryBuilder('u')
+                    ->where("u.email = ?1")
+                    ->andWhere("u.id != ?2")
+                    ->setParameter(1, $email)
                     ->setParameter(2, $excluded_id)
                     ->getQuery()
                     ->getResult();

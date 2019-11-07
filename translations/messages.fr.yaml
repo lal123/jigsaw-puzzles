@@ -8,8 +8,9 @@ puzzle.edit.title: Editer le puzzle
 help.characters: 4 à 24 caractères
 help.email: Fournissez une adresse e-mail valide
 player.create.title: Créer un compte
-player.label.name: Pseudo
+player.label.name: Nom de joueur
 player.label.password: Mot de passe
+player.label.confirm: Confirmation
 player.label.email: E-mail
 player.label.create: Créer
 player.label.login: Se connecter
@@ -17,4 +18,10 @@ player.label.update: Mettre à jour
 player.update.title: Votre compte
 player.sign_in.title: Se connecter
 player.sign_out.title: Se déconnecter
+player.error.name.invalid: Nom de joueur invalide
+player.error.name.exists: Ce nom de joueur existe déjà
+player.error.password.invalid: Mot de passe invalide
+player.error.confirm.invalid: Erreur de confirmation
+player.error.email.exists: Cet e-mail est déjà utilisé
+player.update.success: Votre compte a bien été mis à jour
 Anonymous: Anonyme

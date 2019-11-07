@@ -34,6 +34,14 @@ class PlayerUpdateType extends AbstractType
                     'maxlength' => 24
                 ]
             ])
+            ->add('confirm', PasswordType::class, [
+                'label' => 'player.label.confirm',
+                'mapped' => false,
+                'required' => false,
+                'attr' => [
+                    'maxlength' => 24
+                ]
+            ])
             ->add('email', EmailType::class, [
                 'label' => 'player.label.email',
                 'help' => 'help.email',
@@ -43,8 +51,8 @@ class PlayerUpdateType extends AbstractType
                     'maxlength' => 128
                 ]
             ])
-            ->add('create', SubmitType::class, [
-                'label' => 'player.label.update'
+            ->add('update', SubmitType::class, [
+                'label' => 'player.label.update',
             ])
         ;
     }

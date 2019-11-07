@@ -33,6 +33,10 @@ class PlayerController extends AbstractController
             return $this->redirectToRoute('player_update_account');
         }
 
+        $em = $this->getDoctrine()->getManager();
+        
+        $repository = $this->getDoctrine()->getRepository(Player::class);
+
         $player = new Player();
         $player->setName($translator->trans('Anonymous'));
 
@@ -41,25 +45,41 @@ class PlayerController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            
-            $repository = $this->getDoctrine()->getRepository(Player::class);
 
-            if(!$repository->existsPlayer($player->getName())) 
-            {
-                $session->set('player', $player);
-            
+            $name = $form->get('name')->getData();
+            if(strlen($name) < 4) {
+                $form->get('name')->addError(new FormError($translator->trans('player.error.name.invalid')));
+            } else {
+                if($repository->existsPlayer($name)) {
+                    $form->get('name')->addError(new FormError($translator->trans('player.error.name.exists')));
+                }
+            }
+
+            $password = $form->get('password')->getData();
+            if(strlen($password) < 4 ) {
+                $form->get('password')->addError(new FormError($translator->trans('player.error.password.invalid')));
+            } else {
+                $confirm = $form->get('confirm')->getData();
+                if($confirm != $password) {
+                    $form->get('confirm')->addError(new FormError($translator->trans('player.error.confirm.invalid')));
+                } else {
+                    $player->setPassword($password);
+                }
+            }
+
+            $email = $form->get('email')->getData();
+            if($repository->existsEmail($email)) {
+                $form->get('email')->addError(new FormError($translator->trans('player.error.email.exists')));
+            }
+
+            if(0 === count($form->getErrors(true, true))) {
+
                 $em->persist($player);
                 $em->flush();
 
+                $session->set('player', $player);
+            
                 return $this->redirectToRoute('homepage');
-            }
-            else
-            {
-                $this->addFlash(
-                    'error',
-                    'Player name already exists!'
-                );
             }
         }
 
@@ -89,42 +109,48 @@ class PlayerController extends AbstractController
 
         $player = $repository->getPlayerFromId($session->get('player')->getId());
 
-        //var_dump($player);
-
         $form = $this->createForm(PlayerUpdateType::class, $player);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $error = false;
-
-            $password = $form->get('password')->getData();
-
-            if(NULL !== $password) {
-                if(strlen($password) < 4 ) {
-                    $error = true;
-                    $form->get('password')->addError(new FormError('Wrong password'));
-                } else {
-                    $player->setPassword($password);
+            $name = $form->get('name')->getData();
+            if(strlen($name) < 4) {
+                $form->get('name')->addError(new FormError($translator->trans('player.error.name.invalid')));
+            } else {
+                if($repository->existsPlayerName($player->getName(), $player->getId())) {
+                    $form->get('name')->addError(new FormError($translator->trans('player.error.name.exists')));
                 }
             }
 
-            if($repository->existsPlayerName($player->getName(), $player->getId())) {
-                $error = true;
-                $form->get('name')->addError(new FormError('Player name already exists!'));
+            $password = $form->get('password')->getData();
+            if(NULL !== $password) {
+                if(strlen($password) < 4 ) {
+                    $form->get('password')->addError(new FormError($translator->trans('player.error.password.invalid')));
+                } else {
+                    $confirm = $form->get('confirm')->getData();
+                    if($confirm != $password) {
+                        $form->get('confirm')->addError(new FormError($translator->trans('player.error.confirm.invalid')));
+                    } else {
+                        $player->setPassword($password);
+                    }
+                }
             }
 
-            if($error == false) {
+            $email = $form->get('email')->getData();
+            if($repository->existsEmailAddress($email, $player->getId())) {
+                $form->get('email')->addError(new FormError($translator->trans('player.error.email.exists')));
+            }
+
+            if(0 === count($form->getErrors(true, true))) {
+
                 $em->merge($player);
                 $em->flush();
 
                 $session->set('player', $player);
 
-                $this->addFlash(
-                    'notice',
-                    "Updated! (pw: {$password})"
-                );
+                $this->addFlash('notice', $translator->trans('player.update.success'));
             }
         }
 
@@ -144,8 +170,11 @@ class PlayerController extends AbstractController
     {
         $session = $request->getSession();
 
+        $em = $this->getDoctrine()->getManager();
+        
+        $repository = $this->getDoctrine()->getRepository(Player::class);
+
         $player = new Player();
-        $player->setName($translator->trans('Anonymous'));
 
         $form = $this->createForm(PlayerLoginType::class, $player);
 
@@ -153,11 +182,7 @@ class PlayerController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             
-            $em = $this->getDoctrine()->getManager();
-            
-            $repository = $this->getDoctrine()->getRepository(Player::class);
-
-            $player_obj = $repository->existsPlayer($player->getName());
+            $player_obj = $repository->existsPlayerWithPassword($player->getName(), $player->getPassword());
 
             if($player_obj) 
             {
@@ -167,10 +192,7 @@ class PlayerController extends AbstractController
             }
             else
             {
-                $this->addFlash(
-                    'error',
-                    'Player name does no exist!'
-                );
+                $this->addFlash('error', 'Player name does no exist!');
             }
         }
 
