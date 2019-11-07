@@ -24,4 +24,4 @@ player.error.password.invalid: Invalid password
 player.error.confirm.invalid: Confirmation error
 player.error.email.exists: This email is already used
 player.update.success: Your account has been updated
-Anonymous: Anonymous
+player.delete.title: Delete account

@@ -24,4 +24,4 @@ player.error.password.invalid: Mot de passe invalide
 player.error.confirm.invalid: Erreur de confirmation
 player.error.email.exists: Cet e-mail est déjà utilisé
 player.update.success: Votre compte a bien été mis à jour
-Anonymous: Anonyme
+player.delete.title: Supprimer le compte

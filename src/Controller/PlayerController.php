@@ -162,6 +162,34 @@ class PlayerController extends AbstractController
 
     /**
      * @Route({
+     *      "en": "/player/delete-account",
+     *      "fr": "/joueur/supprimer-le-compte"
+     * }, name="player_delete_account")
+     */
+    public function delete_account(Request $request)
+    {
+        $session = $request->getSession();
+
+        if(!$session->has('player')) {
+            return $this->redirectToRoute('player_create_account');
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        
+        $repository = $this->getDoctrine()->getRepository(Player::class);
+
+        $player = $repository->getPlayerFromId($session->get('player')->getId());
+
+        $em->remove($player);
+        $em->flush();
+
+        $session->clear();
+
+        return $this->redirectToRoute('homepage');
+    }
+
+    /**
+     * @Route({
      *      "en": "/player/sign-in",
      *      "fr": "/joueur/se-connecter"
      * }, name="player_sign_in")
