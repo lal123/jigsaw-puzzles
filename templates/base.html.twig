@@ -85,18 +85,6 @@
         </nav>
         <div class="container" id="central-content">
             {% block menu %}{% endblock %}
-            {% for message in app.flashes('notice') %}
-                <div class="alert alert-notice">
-                    {{ message }}
-                </div>
-            {% endfor %}
-            {% for label, messages in app.flashes(['warning', 'error', 'danger']) %}
-                {% for message in messages %}
-                    <div class="alert alert-{{ label }}">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            {% endfor %}
             {% block body %}{% endblock %}
     		{% block editPuzzle %}{%endblock%}
         </div>

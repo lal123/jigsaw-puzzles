@@ -15,6 +15,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 use App\Services\UrlTranslator;
 use App\Entity\User;
+use App\Form\UserRegisterType;
 use App\Form\UserAccountType;
 
 class SecurityController extends AbstractController
@@ -62,18 +63,55 @@ class SecurityController extends AbstractController
      */
     public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, UrlGeneratorInterface $urlGenerator, UrlTranslator $urlTranslator, TranslatorInterface $translator)
     {
-        if ($request->isMethod('POST')) {
-            $user = new User();
-            $user->setEmail($request->request->get('email'));
-            $user->setUsername($request->request->get('username'));
-            $user->setPassword($passwordEncoder->encodePassword($user, $request->request->get('password')));
+        $user = new User();
+
+        $form = $this->createForm(UserRegisterType::class, $user);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
             $em = $this->getDoctrine()->getManager();
-            $em->persist($user);
-            $em->flush();
-            return $this->redirectToRoute('homepage');
+
+	        $repository = $this->getDoctrine()->getRepository(User::class);
+
+            $username = $form->get('username')->getData();
+            if(strlen($username) < 4) {
+                $form->get('username')->addError(new FormError($translator->trans('player.error.name.invalid')));
+            } else {
+                if($repository->existsUsername($username)) {
+                    $form->get('username')->addError(new FormError($translator->trans('player.error.name.exists')));
+                }
+            }
+
+            $password = $form->get('password')->getData();
+            if(strlen($password) < 4 ) {
+                $form->get('password')->addError(new FormError($translator->trans('player.error.password.invalid')));
+            } else {
+                $confirm = $form->get('confirm')->getData();
+                if($confirm != $password) {
+                    $form->get('confirm')->addError(new FormError($translator->trans('player.error.confirm.invalid')));
+                }
+            }
+
+            $email = $form->get('email')->getData();
+            if($repository->existsEmail($email)) {
+                $form->get('email')->addError(new FormError($translator->trans('player.error.email.exists')));
+            }
+
+            if(0 === count($form->getErrors(true, true))) {
+
+	            $user->setPassword($passwordEncoder->encodePassword($user, $password));
+	
+	            $em->persist($user);
+	            $em->flush();
+
+	            return $this->redirectToRoute('homepage');
+	        }
         }
 
         return $this->render('security/register.html.twig', [
+        	'form' => $form->createView(),
             'locale_versions' => $urlTranslator->translate($request, $urlGenerator),
         ]);
     }
@@ -84,9 +122,9 @@ class SecurityController extends AbstractController
      *      "fr": "/joueur/votre-compte"
      * }, name="app_account")
      */
-    public function account(Request $request, Security $security, UserPasswordEncoderInterface $passwordEncoder, UrlGeneratorInterface $urlGenerator, UrlTranslator $urlTranslator, TranslatorInterface $translator)
+    public function account(Request $request, UserPasswordEncoderInterface $passwordEncoder, UrlGeneratorInterface $urlGenerator, UrlTranslator $urlTranslator, TranslatorInterface $translator)
     {
-		$_user = $security->getUser();
+		$_user = $this->getUser();
 
 		$user = clone $_user;
 
@@ -95,6 +133,7 @@ class SecurityController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+	        
 	        $em = $this->getDoctrine()->getManager();
 	        
 	        $repository = $this->getDoctrine()->getRepository(User::class);
@@ -102,9 +141,34 @@ class SecurityController extends AbstractController
             $username = $form->get('username')->getData();
             if(strlen($username) < 4) {
                 $form->get('username')->addError(new FormError($translator->trans('player.error.name.invalid')));
+            } else {
+                if($repository->isAlreadyUsedUsername($username, $user->getId())) {
+                    $form->get('username')->addError(new FormError($translator->trans('player.error.name.exists')));
+                }
+            }
+
+            $password = $form->get('password')->getData();
+            if(NULL !== $password) {
+                if(strlen($password) < 4 ) {
+                    $form->get('password')->addError(new FormError($translator->trans('player.error.password.invalid')));
+                } else {
+                    $confirm = $form->get('confirm')->getData();
+                    if($confirm != $password) {
+                        $form->get('confirm')->addError(new FormError($translator->trans('player.error.confirm.invalid')));
+                    }
+                }
+            }
+
+            $email = $form->get('email')->getData();
+            if($repository->isAlreadyUsedEmail($email, $user->getId())) {
+                $form->get('email')->addError(new FormError($translator->trans('player.error.email.exists')));
             }
 
             if(0 === count($form->getErrors(true, true))) {
+
+	            if(NULL !== $password) {
+	            	$user->setPassword($passwordEncoder->encodePassword($user, $password));
+	            }
 
                 $em->merge($user);
                 $em->flush();

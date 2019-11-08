@@ -19,6 +19,38 @@ class UserRepository extends ServiceEntityRepository
         parent::__construct($registry, User::class);
     }
 
+    public function existsUsername($username)
+    {
+        return $this->findOneBy(['username' => $username]);
+    }
+
+    public function existsEmail($email)
+    {
+        return $this->findOneBy(['email' => $email]);
+    }
+
+    public function isAlreadyUsedUsername($username, $user_id)
+    {
+        return $this->createQueryBuilder('u')
+                    ->where("u.username = ?1")
+                    ->andWhere("u.id != ?2")
+                    ->setParameter(1, $username)
+                    ->setParameter(2, $user_id)
+                    ->getQuery()
+                    ->getOneOrNullResult();
+    }
+
+    public function isAlreadyUsedEmail($email, $user_id)
+    {
+        return $this->createQueryBuilder('u')
+                    ->where("u.email = ?1")
+                    ->andWhere("u.id != ?2")
+                    ->setParameter(1, $email)
+                    ->setParameter(2, $user_id)
+                    ->getQuery()
+                    ->getOneOrNullResult();
+    }
+
     // /**
     //  * @return User[] Returns an array of User objects
     //  */

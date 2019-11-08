@@ -1,22 +1,23 @@
 <?php 
-// src/Form/PlayerType.php
+// src/Form/UserRegisterType.php
 namespace App\Form;
 
-use App\Entity\Player;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use App\Entity\User;
 
-class PlayerCreateType extends AbstractType
+class UserRegisterType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', TextType::class, [
+            ->add('username', TextType::class, [
                 'label' => 'player.label.name',
                 'help' => 'help.characters',
                 'mapped' => true,
@@ -36,7 +37,7 @@ class PlayerCreateType extends AbstractType
             ])
             ->add('confirm', PasswordType::class, [
                 'label' => 'player.label.confirm',
-                'help' => 'help.characters',
+                'help' => '',
                 'mapped' => false,
                 'required' => true,
                 'attr' => [
@@ -45,15 +46,15 @@ class PlayerCreateType extends AbstractType
             ])
             ->add('email', EmailType::class, [
                 'label' => 'player.label.email',
-                'help' => 'help.characters',
+                'help' => 'help.email',
                 'mapped' => true,
                 'required' => true,
                 'attr' => [
                     'maxlength' => 128
                 ]
             ])
-            ->add('create', SubmitType::class, [
-                'label' => 'player.label.create'
+            ->add('update', SubmitType::class, [
+                'label' => 'player.label.create',
             ])
         ;
     }
@@ -61,7 +62,7 @@ class PlayerCreateType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Player::class,
+            'data_class' => User::class,
         ]);
     }
 }
