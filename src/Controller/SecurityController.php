@@ -86,7 +86,9 @@ class SecurityController extends AbstractController
      */
     public function account(Request $request, Security $security, UserPasswordEncoderInterface $passwordEncoder, UrlGeneratorInterface $urlGenerator, UrlTranslator $urlTranslator, TranslatorInterface $translator)
     {
-		$user = $security->getUser();
+		$_user = $security->getUser();
+
+		$user = clone $_user;
 
         $form = $this->createForm(UserAccountType::class, $user);
 

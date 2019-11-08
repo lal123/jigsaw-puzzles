@@ -37,7 +37,7 @@ class UserAccountType extends AbstractType
             ])
             ->add('confirm', PasswordType::class, [
                 'label' => 'player.label.confirm',
-                'help' => 'help.characters',
+                'help' => '',
                 'mapped' => false,
                 'required' => false,
                 'attr' => [
