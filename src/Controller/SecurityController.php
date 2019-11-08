@@ -6,18 +6,24 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Form\FormError;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 use App\Services\UrlTranslator;
 use App\Entity\User;
+use App\Form\UserAccountType;
 
 class SecurityController extends AbstractController
 {
     /**
-     * @Route("/login", name="app_login")
+     * @Route({
+     *      "en": "/player/sign-in",
+     *      "fr": "/joueur/se-connecter"
+     * }, name="app_login")
      */
     public function login(Request $request, UrlGeneratorInterface $urlGenerator, UrlTranslator $urlTranslator, TranslatorInterface $translator, AuthenticationUtils $authenticationUtils): Response
     {
@@ -38,7 +44,10 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * @Route("/logout", name="app_logout")
+     * @Route({
+     *      "en": "/player/sign-out",
+     *      "fr": "/joueur/se-deconnecter"
+     * }, name="app_logout")
      */
     public function logout()
     {
@@ -46,7 +55,10 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * @Route("/register", name="app_register")
+     * @Route({
+     *      "en": "/player/create-an-account",
+     *      "fr": "/joueur/creer-un-compte"
+     * }, name="app_register")
      */
     public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, UrlGeneratorInterface $urlGenerator, UrlTranslator $urlTranslator, TranslatorInterface $translator)
     {
@@ -66,8 +78,50 @@ class SecurityController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route({
+     *      "en": "/player/your-account",
+     *      "fr": "/joueur/votre-compte"
+     * }, name="app_account")
+     */
+    public function account(Request $request, Security $security, UserPasswordEncoderInterface $passwordEncoder, UrlGeneratorInterface $urlGenerator, UrlTranslator $urlTranslator, TranslatorInterface $translator)
+    {
+		$user = $security->getUser();
+
+        $form = $this->createForm(UserAccountType::class, $user);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+	        $em = $this->getDoctrine()->getManager();
+	        
+	        $repository = $this->getDoctrine()->getRepository(User::class);
+
+            $username = $form->get('username')->getData();
+            if(strlen($username) < 4) {
+                $form->get('username')->addError(new FormError($translator->trans('player.error.name.invalid')));
+            }
+
+            if(0 === count($form->getErrors(true, true))) {
+
+                $em->merge($user);
+                $em->flush();
+
+                $this->addFlash('notice', $translator->trans('player.update.success'));
+            }
+        }
+
+        return $this->render('security/account.html.twig', [
+        	'form' => $form->createView(),
+            'locale_versions' => $urlTranslator->translate($request, $urlGenerator),
+        ]);
+    }
+
 	/**
-     * @Route("/forgottenPassword", name="app_forgotten_password")
+     * @Route({
+     *      "en": "/player/forgotten-password",
+     *      "fr": "/joueur/mot-de-passe-oublie"
+     * }, name="app_forgotten_password")
      */
     public function forgottenPassword(Request $request, UserPasswordEncoderInterface $passwordEncoder, \Swift_Mailer $mailer,
         TokenGeneratorInterface $tokenGenerator, UrlGeneratorInterface $urlGenerator, UrlTranslator $urlTranslator, TranslatorInterface $translator): Response

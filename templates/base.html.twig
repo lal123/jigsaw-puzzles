@@ -55,19 +55,19 @@
               <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
             </form>-->
             <ul class="navbar-nav ml-auto">
-{% if  player != null %}
+{% if app.user %}
               <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle{% if path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) == path('player_update_account') %} active{% endif %}" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user"></span>{{ player.name }}&nbsp;</a>
+                <a class="nav-link dropdown-toggle{% if path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) == path('app_account') %} active{% endif %}" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user"></span>{{ app.user.username }}&nbsp;</a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item{% if path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) == path('player_update_account') %} active{% endif %}" href="{{ path('player_update_account') }}">{% trans %}player.update.title{% endtrans %}</a>
-                    <a class="dropdown-item" href="{{ path('player_sign_out') }}"><span class="glyphicon glyphicon-log-out"></span>{% trans %}player.sign_out.title{% endtrans %}</a>
+                    <a class="dropdown-item{% if path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) == path('app_account') %} active{% endif %}" href="{{ path('app_account') }}">{% trans %}player.update.title{% endtrans %}</a>
+                    <a class="dropdown-item" href="{{ path('app_logout') }}"><span class="glyphicon glyphicon-log-out"></span>{% trans %}player.sign_out.title{% endtrans %}</a>
                 </div>
 {% else %}
-              <li class="nav-item{% if path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) == path('player_create_account') %} active{% endif %}">
-                <a class="nav-link" href="{{ path('player_create_account') }}"><span class="glyphicon glyphicon-user"></span>{% trans %}player.create.title{% endtrans %}</a>
+              <li class="nav-item{% if path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) == path('app_register') %} active{% endif %}">
+                <a class="nav-link" href="{{ path('app_register') }}"><span class="glyphicon glyphicon-user"></span>{% trans %}player.create.title{% endtrans %}</a>
               </li>
-              <li class="nav-item{% if path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) == path('player_sign_in') %} active{% endif %}">
-                <a class="nav-link" href="{{ path('player_sign_in') }}"><span class="glyphicon glyphicon-log-in"></span>{% trans %}player.sign_in.title{% endtrans %}</a>
+              <li class="nav-item{% if path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) == path('app_login') %} active{% endif %}">
+                <a class="nav-link" href="{{ path('app_login') }}"><span class="glyphicon glyphicon-log-in"></span>{% trans %}player.sign_in.title{% endtrans %}</a>
               </li>
 {% endif %}
               <li class="nav-item dropdown">
@@ -84,8 +84,19 @@
           </div>
         </nav>
         <div class="container" id="central-content">
-            {% block menu %}
-            {% endblock %}
+            {% block menu %}{% endblock %}
+            {% for message in app.flashes('notice') %}
+                <div class="alert alert-notice">
+                    {{ message }}
+                </div>
+            {% endfor %}
+            {% for label, messages in app.flashes(['warning', 'error', 'danger']) %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ label }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
             {% block body %}{% endblock %}
     		{% block editPuzzle %}{%endblock%}
         </div>

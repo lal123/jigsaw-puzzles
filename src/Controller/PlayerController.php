@@ -19,8 +19,8 @@ class PlayerController extends AbstractController
 {
     /**
      * @Route({
-     *      "en": "/player/create-an-account",
-     *      "fr": "/joueur/creer-un-compte"
+     *      "en": "/z/player/create-an-account",
+     *      "fr": "/z/joueur/creer-un-compte"
      * }, name="player_create_account")
      */
     public function create_account(Request $request, UrlGeneratorInterface $urlGenerator, UrlTranslator $urlTranslator, TranslatorInterface $translator)
@@ -90,8 +90,8 @@ class PlayerController extends AbstractController
 
     /**
      * @Route({
-     *      "en": "/player/your-account",
-     *      "fr": "/joueur/votre-compte"
+     *      "en": "/z/player/your-account",
+     *      "fr": "/z/joueur/votre-compte"
      * }, name="player_update_account")
      */
     public function update_account(Request $request, UrlGeneratorInterface $urlGenerator, UrlTranslator $urlTranslator, TranslatorInterface $translator)
@@ -189,8 +189,8 @@ class PlayerController extends AbstractController
 
     /**
      * @Route({
-     *      "en": "/player/sign-in",
-     *      "fr": "/joueur/se-connecter"
+     *      "en": "/z/player/sign-in",
+     *      "fr": "/z/joueur/se-connecter"
      * }, name="player_sign_in")
      */
     public function sign_in(Request $request, UrlGeneratorInterface $urlGenerator, UrlTranslator $urlTranslator, TranslatorInterface $translator)
@@ -237,8 +237,8 @@ class PlayerController extends AbstractController
 
     /**
      * @Route({
-     *      "en": "/player/sign-out",
-     *      "fr": "/joueur/se-deconnecter"
+     *      "en": "/z/player/sign-out",
+     *      "fr": "/z/joueur/se-deconnecter"
      * }, name="player_sign_out")
      */
     public function sign_out(Request $request)
