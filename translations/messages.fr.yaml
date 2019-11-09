@@ -27,3 +27,5 @@ player.error.email.exists: Cet e-mail est déjà utilisé
 player.error.login.invalid: Nom de joueur ou mot de passe invalide
 player.update.success: Votre compte a bien été mis à jour
 player.delete.title: Supprimer le compte
+Invalid credentials.: Identifiants invalides
+Username could not be found.: Ce nom de joueur n'existe pas

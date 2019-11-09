@@ -27,3 +27,4 @@ player.error.email.exists: This email is already used
 player.error.login.invalid: Invalid player name or passwprd
 player.update.success: Your account has been updated
 player.delete.title: Delete account
+Invalid credentials.: Invalid identifiers
