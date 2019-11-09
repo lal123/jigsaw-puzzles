@@ -238,7 +238,10 @@ class SecurityController extends AbstractController
     }
 
 	/**
-     * @Route("/reset_password/{token}", name="app_reset_password")
+     * @Route({
+     *      "en": "/player/reset-password/{token}",
+     *      "fr": "/joueur/changement-mot-de-passe/{token}"
+     * }, name="app_reset_password")
      */
     public function resetPassword(Request $request, string $token, UserPasswordEncoderInterface $passwordEncoder, UrlGeneratorInterface $urlGenerator, UrlTranslator $urlTranslator, TranslatorInterface $translator)
     {
