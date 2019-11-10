@@ -27,4 +27,7 @@
         {% endfor %}
     {% endfor %}
     {{ form_end(form) }}
+    <br />
+    <br />
+    <a href="{{ path('app_delete_account') }}" onclick="if(!confirm('Are you sure ?')) { return false; }">{% trans %}player.delete.title{% endtrans %}</a>
 {% endblock %}

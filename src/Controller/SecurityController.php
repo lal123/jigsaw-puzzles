@@ -17,6 +17,7 @@ use App\Services\UrlTranslator;
 use App\Entity\User;
 use App\Form\UserRegisterType;
 use App\Form\UserAccountType;
+use App\Form\UserForgottenPasswordType;
 
 class SecurityController extends AbstractController
 {
@@ -102,7 +103,11 @@ class SecurityController extends AbstractController
             if(0 === count($form->getErrors(true, true))) {
 
 	            $user->setPassword($passwordEncoder->encodePassword($user, $password));
-	
+                $user->setRoles(['ROLE_USER']);
+                $now = new \DateTime();
+                $user->setCreated($now);
+                $user->setUpdated($now);
+
 	            $em->persist($user);
 	            $em->flush();
 
@@ -120,9 +125,9 @@ class SecurityController extends AbstractController
      * @Route({
      *      "en": "/player/your-account",
      *      "fr": "/joueur/votre-compte"
-     * }, name="app_account")
+     * }, name="app_edit_account")
      */
-    public function account(Request $request, UserPasswordEncoderInterface $passwordEncoder, UrlGeneratorInterface $urlGenerator, UrlTranslator $urlTranslator, TranslatorInterface $translator)
+    public function editAccount(Request $request, UserPasswordEncoderInterface $passwordEncoder, UrlGeneratorInterface $urlGenerator, UrlTranslator $urlTranslator, TranslatorInterface $translator)
     {
 		$_user = $this->getUser();
 
@@ -169,6 +174,8 @@ class SecurityController extends AbstractController
 	            if(NULL !== $password) {
 	            	$user->setPassword($passwordEncoder->encodePassword($user, $password));
 	            }
+                $now = new \DateTime();
+                $user->setUpdated($now);
 
                 $em->merge($user);
                 $em->flush();
@@ -183,6 +190,27 @@ class SecurityController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route({
+     *      "en": "/player/delete-account",
+     *      "fr": "/joueur/supprimer-le-compte"
+     * }, name="app_delete_account")
+     */
+    public function deleteAccount(Request $request)
+    {
+		$user = $this->getUser();
+
+        $em = $this->getDoctrine()->getManager();
+        
+        $this->get('security.token_storage')->setToken(null);
+		$request->getSession()->invalidate();
+
+        $em->remove($user);
+        $em->flush();
+
+        return $this->redirectToRoute('homepage');
+    }
+
 	/**
      * @Route({
      *      "en": "/player/forgotten-password",
@@ -193,46 +221,48 @@ class SecurityController extends AbstractController
         TokenGeneratorInterface $tokenGenerator, UrlGeneratorInterface $urlGenerator, UrlTranslator $urlTranslator, TranslatorInterface $translator): Response
     {
 
-        if ($request->isMethod('POST')) {
+    	$user = new User();
 
-            $email = $request->request->get('email');
+        $form = $this->createForm(UserForgottenPasswordType::class, $user);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
 
             $entityManager = $this->getDoctrine()->getManager();
-            $user = $entityManager->getRepository(User::class)->findOneByEmail($email);
-            /* @var $user User */
+            $dbuser = $entityManager->getRepository(User::class)->findOneByEmail($user->getEmail());
 
-            if ($user === null) {
-                $this->addFlash('danger', 'Email Inconnu');
-                return $this->redirectToRoute('homepage');
-            }
-            $token = $tokenGenerator->generateToken();
+            if ($dbuser === null) {
+                $form->get('email')->addError(new FormError($translator->trans('player.error.email.unknown')));
+            } else {
+	            $token = $tokenGenerator->generateToken();
 
-            try{
-                $user->setToken($token);
-                $entityManager->flush();
-            } catch (\Exception $e) {
-                $this->addFlash('warning', $e->getMessage());
-                return $this->redirectToRoute('homepage');
-            }
+	            try{
+	                $dbuser->setToken($token);
+	                $entityManager->flush();
+	
+		            $url = $this->generateUrl('app_reset_password', array('token' => $token), UrlGeneratorInterface::ABSOLUTE_URL);
 
-            $url = $this->generateUrl('app_reset_password', array('token' => $token), UrlGeneratorInterface::ABSOLUTE_URL);
+		            $message = (new \Swift_Message('Forgotten Password'))
+		                ->setFrom('webmaster@jigsaw-puzzles.net')
+		                ->setTo($dbuser->getEmail())
+		                ->setBody(
+		                    '<a href="' . $url . '">' . $url . '</a>',
+		                    'text/html'
+		                );
 
-            $message = (new \Swift_Message('Forgot Password'))
-                ->setFrom('g.ponty@dev-web.io')
-                ->setTo($user->getEmail())
-                ->setBody(
-                    "blablabla voici le token pour reseter votre mot de passe : " . $url,
-                    'text/html'
-                );
+		            $mailer->send($message);
 
-            $mailer->send($message);
+		            $this->addFlash('notice', 'Mail envoyé');
+	            } catch (\Exception $e) {
+	                $this->addFlash('warning', $e->getMessage());
+	            }
 
-            $this->addFlash('notice', 'Mail envoyé');
-
-            return $this->redirectToRoute('homepage');
+			}
         }
 
         return $this->render('security/forgotten_password.html.twig', [
+            'form' => $form->createView(),
             'locale_versions' => $urlTranslator->translate($request, $urlGenerator),
         ]);
     }

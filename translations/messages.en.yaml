@@ -16,6 +16,7 @@ player.label.email: Email
 player.label.create: Create
 player.label.login: Sign in
 player.label.update: Update
+player.label.send_email: Send it
 player.update.title: Your account
 player.sign_in.title: Sign in
 player.sign_out.title: Sign out
@@ -25,6 +26,7 @@ player.error.password.invalid: Invalid password
 player.error.confirm.invalid: Confirmation error
 player.error.email.exists: This email is already used
 player.error.login.invalid: Invalid player name or passwprd
+player.error.email.unknown: Unknown email address
 player.update.success: Your account has been updated
 player.delete.title: Delete account
 Invalid credentials.: Invalid identifiers

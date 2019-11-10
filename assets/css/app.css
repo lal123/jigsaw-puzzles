@@ -53,7 +53,18 @@ body {
 	display: none;
 }
 .navbar-brand.secondary {
-	display: show;
+	display: block;
+}
+@media screen and (max-width: 991px) {
+	.site-title {
+		display: none;
+	}
+	.navbar-brand.main {
+		display: block;
+	}
+	.navbar-brand.secondary {
+		display: none;
+	}
 }
 #central-content.shifted {
 	margin-top: 56px;

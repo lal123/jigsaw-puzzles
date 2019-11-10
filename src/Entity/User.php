@@ -16,29 +16,44 @@ class User implements UserInterface
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="string", length=128, unique=true)
      */
-    private $username;
+    protected $username;
 
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
      */
-    private $password;
+    protected $password;
 
     /**
      * @ORM\Column(type="string", length=128, unique=true)
      */
-    private $email;
+    protected $email;
+
+    /**
+     * @ORM\Column(type="text")
+     */
+    protected $roles;
 
     /**
      * @var string le token qui servira lors de l'oubli de mot de passe
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     protected $token;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    protected $created;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    protected $updated;
 
     public function getId(): ?int
     {
@@ -67,13 +82,14 @@ class User implements UserInterface
      */
     public function getRoles(): array
     {
-        $roles = ['ROLE_USER'];
+        $roles = json_decode($this->roles);
 
         return array_unique($roles);
     }
 
     public function setRoles(array $roles): self
     {
+        $this->roles = json_encode($roles);
         return $this;
     }
 
@@ -135,5 +151,37 @@ class User implements UserInterface
     public function setToken(?string $token): void
     {
         $this->token = $token;
+    }
+
+    /**
+     * @return datetime
+     */
+    public function getCreated(): \DateTime
+    {
+        return $this->created;
+    }
+
+    /**
+     * @param datetime $created
+     */
+    public function setCreated(?\DateTime $created): void
+    {
+        $this->created = $created;
+    }
+
+    /**
+     * @return datetime
+     */
+    public function getUpdated(): \DateTime
+    {
+        return $this->updated;
+    }
+
+    /**
+     * @param datetime $updated
+     */
+    public function setUpdated(?\DateTime $updated): void
+    {
+        $this->updated = $updated;
     }
 }

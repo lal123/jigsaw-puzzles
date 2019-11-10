@@ -22,6 +22,7 @@ class UserAccountType extends AbstractType
                 'help' => 'help.characters',
                 'mapped' => true,
                 'required' => true,
+                'disabled' => true,
                 'attr' => [
                     'maxlength' => 24
                 ]

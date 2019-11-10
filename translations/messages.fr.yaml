@@ -16,6 +16,7 @@ player.label.email: E-mail
 player.label.create: Créer
 player.label.login: Se connecter
 player.label.update: Mettre à jour
+player.label.send_email: Envoyer
 player.update.title: Votre compte
 player.sign_in.title: Se connecter
 player.sign_out.title: Se déconnecter
@@ -25,6 +26,7 @@ player.error.password.invalid: Mot de passe invalide
 player.error.confirm.invalid: Erreur de confirmation
 player.error.email.exists: Cet e-mail est déjà utilisé
 player.error.login.invalid: Nom de joueur ou mot de passe invalide
+player.error.email.unknown: Adresse e-mail inconnue
 player.update.success: Votre compte a bien été mis à jour
 player.delete.title: Supprimer le compte
 Invalid credentials.: Identifiants invalides

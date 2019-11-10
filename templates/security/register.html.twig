@@ -3,7 +3,6 @@
 {% block title %}Register !{% endblock %}
 
 {% block body %}
-
     {{ form_start(form, {
         'attr': {
             'class': 'col-lg-5' 
@@ -19,7 +18,7 @@
     {% endfor %}
 
     {# pass an array argument to get the messages of those types  #}
-    {% for label, messages in app.flashes(['warning', 'error']) %}
+    {% for label, messages in app.flashes(['warning', 'error', 'danger']) %}
         {% for message in messages %}
             <div class="alert alert-{{ label }}">
                 {{ message }}
