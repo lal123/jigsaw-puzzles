@@ -13,15 +13,24 @@
         {% block javascripts %}
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id={{ ga_tracking[app.request.locale] }}"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', '{{ ga_tracking[app.request.locale] }}');
+        </script>
     </head>
     <body>
         <a name="top"></a>
+        
         <div style="height: 100px">
             <!-- <img src="{{ asset('build/img/logo_' ~ app.request.locale ~ '.png') }}" alt="" /> -->
-            <div class="site-title"><a href="/">{% trans %}Main Title{% endtrans %}</a></div>
+            <div class="site-title"><a href="/">{% trans %}main.title{% endtrans %}</a></div>
         </div>
         <nav class="navbar navbar-expand-lg navbar-light bg-light" id="top-navbar">
-          <a class="navbar-brand main" href="/">{% trans %}Jigsaw-Puzzles{% endtrans %}</a>
+          <a class="navbar-brand main" href="/">{% trans %}main.title{% endtrans %}</a>
           <span class="navbar-brand secondary"></span>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>

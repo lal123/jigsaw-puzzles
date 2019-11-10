@@ -4,11 +4,11 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
-    domain_list: {en: {domain_name: 'jigsaw-puzzles%env(DOMAIN_EXT)%', label: 'English Version'}, fr: {domain_name: 'jeu-de-puzzle%env(DOMAIN_EXT)%', label: 'Version Française'}}
+#    domain_list: {en: {domain_name: 'jigsaw-puzzles%env(DOMAIN_EXT)%', label: 'English Version', ga_tracking: 'gaen'}, fr: {domain_name: 'jeu-de-puzzle%env(DOMAIN_EXT)%', label: 'Version Française', ga_tracking: 'gafr'}}
 
 twig:
     globals:
-        domain_list: {en: {domain_name: 'jigsaw-puzzles', label: 'English Version'}, fr: {domain_name: 'jeu-de-puzzle', label: 'Version Française'}}
+        ga_tracking: {en: 'UA-350084-2', fr: 'UA-350084-1'}
 
 services:
     # default configuration for services in *this* file
