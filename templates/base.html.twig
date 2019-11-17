@@ -79,13 +79,11 @@
                 <a class="nav-link" href="{{ path('app_login') }}"><span class="glyphicon glyphicon-log-in"></span>{% trans %}player.sign_in.title{% endtrans %}</a>
               </li>
 {% endif %}
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  {{ app.request.locale }}
-                </a>
+              <li class="nav-item dropdown lang-select">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="flag flag-{{ app.request.locale }}"></span></a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 {% for lang, version in locale_versions %}
-                    <a class="dropdown-item{% if lang == app.request.locale %} active{% endif %}" href="{{ version.url }}" title="{{ version.label }}">{{ lang }}</a>
+                    <a class="dropdown-item{% if lang == app.request.locale %} active{% endif %}" href="{{ version.url }}" title="{{ version.label }}"><span class="flag flag-{{ lang }}"></span> {{ version.label }}</a>
                 {% endfor %}
                 </div>
               </li>
