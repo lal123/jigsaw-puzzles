@@ -1,0 +1,5 @@
+{% for partner, partner_count in count %}
+	{% for lang, numb in partner_count %}
+		{{ partner }} {{ lang }} {{ numb }}
+	{% endfor %}
+{% endfor %}

@@ -25,7 +25,7 @@ class PuzzlesController extends AbstractController
 
         $repository = $this->getDoctrine()->getRepository(Puzzle::class);
 
-        $puzzles = $repository->findAll();
+        $puzzles = $repository->findBy(['locale' => $request->getLocale()], ['created' => 'DESC']);
 
         //echo $request->getSession()->get('a');die();
 
@@ -53,6 +53,10 @@ class PuzzlesController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             
+            $puzzle->setLocale($request->getLocale());
+            $now = new \DateTime();
+            $puzzle->setCreated($now);
+            $puzzle->setUpdated($now);
             $em->persist($puzzle);
             $em->flush();
 
@@ -78,7 +82,12 @@ class PuzzlesController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $em = $this->getDoctrine()->getManager();
+            
+            $now = new \DateTime();
+            $puzzle->setUpdated($now);
+
+            $em->flush();
 
             return $this->redirectToRoute('your_puzzles_list');
         }
