@@ -40,7 +40,7 @@ class PuzzleRepository extends ServiceEntityRepository
         	case '%':
 	        	$sql = "
 		        	REPLACE INTO `jigsaw-puzzles`.puzzles (id, title, partner, locale, filename, created, updated, published)
-		            SELECT p.puzz_id, JSON_OBJECT('en', p.title_en, 'fr', p.title), :partner, :locale, p.filename, p.pub_date, p.pub_date, p.pub_date 
+		            SELECT p.puzz_id, CONCAT('{\"en\": \"', p.title_en, '\", \"fr\": \"', p.title, '\"}'), :partner, :locale, p.filename, p.pub_date, p.pub_date, p.pub_date 
 		            	FROM jpuzzles.puzzles p
 		            WHERE 1
 		            	AND ISNULL(p.partner)
@@ -51,7 +51,7 @@ class PuzzleRepository extends ServiceEntityRepository
 		    case '@':
 	        	$sql = "
 		        	REPLACE INTO `jigsaw-puzzles`.puzzles (id, title, partner, locale, filename, created, updated, published)
-		            SELECT p.puzz_id, JSON_OBJECT(:locale, p.title), :partner, :locale, p.filename, p.pub_date, p.pub_date, v.validato 
+		            SELECT p.puzz_id, CONCAT('{\"', :locale, '\": \"', p.title, '\"}'), :partner, :locale, p.filename, p.pub_date, p.pub_date, v.validato 
 		            	FROM jpuzzles.puzzles p
 		            	JOIN jpuzzles.validation v ON p.puzz_id = v.puzz_id
 		            WHERE 1
@@ -65,7 +65,7 @@ class PuzzleRepository extends ServiceEntityRepository
         	default:
 	        	$sql = "
 		        	REPLACE INTO `jigsaw-puzzles`.puzzles (id, title, partner, locale, filename, created, updated, published)
-		            SELECT p.puzz_id, JSON_OBJECT(:locale, p.title), :partner, :locale, p.filename, p.pub_date, p.pub_date, p.pub_date 
+		            SELECT p.puzz_id, CONCAT('{\"', :locale, '\": \"', p.title, '\"}'), :partner, :locale, p.filename, p.pub_date, p.pub_date, p.pub_date 
 		            	FROM jpuzzles.puzzles p
 		            WHERE 1
 		            	AND p.partner = :partner
