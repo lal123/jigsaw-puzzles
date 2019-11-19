@@ -23,6 +23,11 @@ class Puzzle
     private $title;
 
     /**
+    * @ORM\Column(type="string", length=1)
+    */
+    private $partner;
+
+    /**
     * @ORM\Column(type="string", length=2)
     */
     private $locale;
@@ -41,6 +46,11 @@ class Puzzle
      * @ORM\Column(type="datetime")
      */
     protected $updated;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $published;
 
     public function __construct()
     {
@@ -64,11 +74,37 @@ class Puzzle
     }
 
     /**
+     * @return string
+     */
+    public function getLocaleTitle($locale): ?string
+    {
+        return json_decode($this->title)->{$locale};
+    }
+
+    /**
      * @param string $title
      */
     public function setTitle(string $title): self
     {
         $this->title = $title;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPartner(): ?string
+    {
+        return $this->partner;
+    }
+
+    /**
+     * @param string $partner
+     */
+    public function setPartner(string $partner): self
+    {
+        $this->partner = $partner;
 
         return $this;
     }
@@ -139,5 +175,21 @@ class Puzzle
     public function setUpdated(?\DateTime $updated): void
     {
         $this->updated = $updated;
+    }
+
+    /**
+     * @return datetime
+     */
+    public function getPublished(): \DateTime
+    {
+        return $this->published;
+    }
+
+    /**
+     * @param datetime $published
+     */
+    public function setPublished(?\DateTime $published): void
+    {
+        $this->published = $published;
     }
 }

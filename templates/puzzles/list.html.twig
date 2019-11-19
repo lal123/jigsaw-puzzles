@@ -12,8 +12,8 @@
             <ul>
             {% for puzzle in puzzles %}
                 <li>
-                    {{ puzzle.title }}
-                    <img src="../data/puzzles/{{ app.request.locale }}/{{ puzzle.filename }}.jpg" style="max-width: 100px" alt="{{ puzzle.title }}" />
+                    {{ puzzle.localetitle(app.request.locale) }}
+                    <img src="../data/puzzles/{{ app.request.locale }}/{{ puzzle.filename }}.jpg" style="max-width: 100px" alt="{{ puzzle.localetitle(app.request.locale) }}" />
                     | <a href="{{ path('your_puzzles_edit', {id: puzzle.id}, false) }}">Edit</a>
                     | <a class="puzzle_edit_modal" href="{{ path('your_puzzles_edit_modal', {id: puzzle.id}, false) }}" data-toggle="modal">Edit (modal)</a>
                     | <a href="{{ path('app_puzzles_delete', {id: puzzle.id}, false) }}">Delete</a>

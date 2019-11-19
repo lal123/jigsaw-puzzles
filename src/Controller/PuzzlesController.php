@@ -21,11 +21,13 @@ class PuzzlesController extends AbstractController
      */
     public function list(Request $request, UrlGeneratorInterface $urlGenerator, UrlTranslator $urlTranslator)
     {
+        $locale = $request->getLocale();
+
         $session = $request->getSession();
 
         $repository = $this->getDoctrine()->getRepository(Puzzle::class);
 
-        $puzzles = $repository->findBy(['locale' => $request->getLocale()], ['created' => 'DESC']);
+        $puzzles = $repository->findLocaleExt("'%', '@'", $locale);
 
         //echo $request->getSession()->get('a');die();
 
@@ -43,6 +45,8 @@ class PuzzlesController extends AbstractController
      */
     public function create(Request $request, UrlGeneratorInterface $urlGenerator, UrlTranslator $urlTranslator)
     {
+        $locale = $request->getLocale();
+
         $puzzle = new Puzzle();
         $puzzle->setTitle('No Name');
 
@@ -53,10 +57,18 @@ class PuzzlesController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             
-            $puzzle->setLocale($request->getLocale());
+            $puzzle->setTitle(json_encode([$locale => $puzzle->getTitle()]));
+
+            $puzzle->setPartner('@');
+
+            $puzzle->setLocale($locale);
+
+            $puzzle->setFilename('test');
+
             $now = new \DateTime();
             $puzzle->setCreated($now);
             $puzzle->setUpdated($now);
+            //$puzzle->setPublished($now);
             $em->persist($puzzle);
             $em->flush();
 
