@@ -38,6 +38,11 @@ class Puzzle
     private $filename;
 
     /**
+    * @ORM\Column(type="string", nullable=true)
+    */
+    private $keywords;
+
+    /**
      * @ORM\Column(type="datetime")
      */
     protected $created;
@@ -78,7 +83,9 @@ class Puzzle
      */
     public function getLocaleTitle($locale): ?string
     {
-        return json_decode($this->title)->{$locale};
+        $title = json_decode($this->title, true);
+
+        return $title[$locale];
     }
 
     /**
@@ -141,6 +148,24 @@ class Puzzle
     public function setFilename(string $filename): self
     {
         $this->filename = $filename;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getKeywords(): ?string
+    {
+        return $this->keywords;
+    }
+
+    /**
+     * @param string $keywords
+     */
+    public function setKeywords(string $keywords): self
+    {
+        $this->keywords = $keywords;
 
         return $this;
     }

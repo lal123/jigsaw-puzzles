@@ -14,18 +14,32 @@ body {
 	font-size: 48px;
 	line-height: 56px;
 }
+
+/* TOP MENU >> */
 @media screen and (min-width: 992px) {
 	.lang-select .dropdown-menu {
 		left: auto;
 		right: 0;
 	}
 }
+.dropdown-menu.show > .dropdown-item,
+.dropdown-menu.show > .dropdown-item {
+	color: rgba(0, 0, 0, 0.5);
+}
+.dropdown-menu.show > .dropdown-item.active,
+.dropdown-menu.show > .dropdown-item:active {
+	background-color: transparent;
+	color: rgba(0, 0, 0, 0.9);
+}
+.dropdown-menu.show > .dropdown-item.active > .nav-link,
+.dropdown-menu.show > .dropdown-item:active > .nav-link {
+}
 .lang-select .flag{
   padding: 0;
   margin: 1px;
   display: inline-block;
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
   cursor: pointer;
   vertical-align: bottom;
 }
@@ -37,6 +51,9 @@ body {
   background: url(../img/sprites.png) -5px -185px no-repeat;
   top: 56px;
 }
+/* << TOP MENU */
+
+
 #central-content.container {
 	max-width: 100%;
 	padding-left: 5px;

@@ -9,11 +9,23 @@
             <h1 class="h3 mb-3 font-weight-normal">{% trans %}Your Puzzles{% endtrans %}</h1>
         </div>
         <div class="container">
+            <div class="row">
+                  {{ count }} puzzles
+                  Page :
+                  {% for p in 1..pages %}
+                        {% if p == page %}
+                        {{ p }}
+                        {% else %}
+                        <a href="{{ path(app.request.attributes.get('_route'), {'page': p}) }}">{{ p }}</a>
+                        {% endif %}
+                        &nbsp;
+                  {% endfor %}
+            </div>
             <ul>
             {% for puzzle in puzzles %}
                 <li>
                     {{ puzzle.localetitle(app.request.locale) }}
-                    <img src="../data/puzzles/{{ app.request.locale }}/{{ puzzle.filename }}.jpg" style="max-width: 100px" alt="{{ puzzle.localetitle(app.request.locale) }}" />
+                    <img src="/puzzles/preview/{{ app.request.locale }}/{{ puzzle.filename }}" style="max-width: 100px" alt="{{ puzzle.localetitle(app.request.locale) }}" />
                     | <a href="{{ path('your_puzzles_edit', {id: puzzle.id}, false) }}">Edit</a>
                     | <a class="puzzle_edit_modal" href="{{ path('your_puzzles_edit_modal', {id: puzzle.id}, false) }}" data-toggle="modal">Edit (modal)</a>
                     | <a href="{{ path('app_puzzles_delete', {id: puzzle.id}, false) }}">Delete</a>

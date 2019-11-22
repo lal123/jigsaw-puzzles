@@ -4,7 +4,9 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use App\Form\PuzzleType;
 use App\Entity\Puzzle;
@@ -15,11 +17,11 @@ class PuzzlesController extends AbstractController
 {
     /**
      * @Route({
-     *      "en": "/your-puzzles",
-     *      "fr": "/vos-puzzles"
+     *      "en": "/your-puzzles/{page<\d+>}",
+     *      "fr": "/vos-puzzles/{page<\d+>}"
      * }, name="your_puzzles_list")
      */
-    public function list(Request $request, UrlGeneratorInterface $urlGenerator, UrlTranslator $urlTranslator)
+    public function list(Request $request, int $page = 1, UrlGeneratorInterface $urlGenerator, UrlTranslator $urlTranslator)
     {
         $locale = $request->getLocale();
 
@@ -27,11 +29,17 @@ class PuzzlesController extends AbstractController
 
         $repository = $this->getDoctrine()->getRepository(Puzzle::class);
 
-        $puzzles = $repository->findLocaleExt("'%', '@'", $locale);
+        $limit = 10;
+        $first = ($page - 1) * $limit;
 
-        //echo $request->getSession()->get('a');die();
+        $puzzles = $repository->findLocaleExt("'%', '@'", $locale, $first, $limit, $count);
+
+        $pages = ceil($count / $limit);
 
         return $this->render('puzzles/list.html.twig', array(
+            'count' => $count,
+            'pages' => $pages,
+            'page' => $page,
             'puzzles' => $puzzles,
             'locale_versions' => $urlTranslator->translate($request, $urlGenerator)
         ));
@@ -147,5 +155,41 @@ class PuzzlesController extends AbstractController
         $em->flush();
 
         return $this->redirectToRoute('your_puzzles_list');
+    }
+
+    /**
+     * @Route("/puzzles/preview/{filename<.+>}")
+     */
+    public function preview(Request $request, string $filename)
+    {
+        $filepath = $this->getParameter('kernel.project_dir') . '/public/data/puzzles/' . $filename . '.jpg';
+        $filename = basename($filepath);
+
+        list($src_width, $src_height, $src_format, $html_code) = getimagesize($filepath);
+        $ratio = $src_width / $src_height;
+        if($ratio > 1.0){
+            $dst_width = 100;
+            $dst_height = intval(100 / $ratio);
+        }else{
+            $dst_width = intval(100 * $ratio);
+            $dst_height = 100;
+        }
+        
+        $src_img = @imagecreatefromjpeg($filepath);
+        
+        $dst_img = imagecreatetruecolor($dst_width, $dst_height);
+        imagecopyresampled($dst_img, $src_img, 0, 0, 0, 0, $dst_width, $dst_height, $src_width, $src_height);
+        
+        ob_start();
+        imagejpeg($dst_img);
+        $image = ob_get_clean();
+
+        $response = new Response();
+        $disposition = $response->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_INLINE, $filename);
+        $response->headers->set('Content-Disposition', $disposition);
+        $response->headers->set('Content-Type', 'image/jpeg');
+        $response->setContent($image);
+
+        return $response;
     }
 }
