@@ -7,7 +7,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use App\Services\ComplexObject;
+use App\Services\UrlTranslator;
 use Twig\Environment;
 
 class HelloController extends AbstractController
@@ -17,9 +19,13 @@ class HelloController extends AbstractController
      *
      * @Route("/", name="homepage")
      */
-    public function home(Request $request, ComplexObject $foo1, Environment $twig)
+    public function home(Request $request, UrlGeneratorInterface $urlGenerator, UrlTranslator $urlTranslator, ComplexObject $foo1, Environment $twig)
     {
         return $this->redirectToRoute('your_puzzles_list');
+
+        return $this->render('index.html.twig', array(
+            'locale_versions' => $urlTranslator->translate($request, $urlGenerator)
+        ));
 
         $request = Request::createFromGlobals();
        

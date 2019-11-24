@@ -13,14 +13,19 @@
                 {{ form_start(form, {
                     'attr': {
                         'novalidate': 'novalidate',
-                        'class': 'col-lg-5' 
+                        'class': 'col-lg-5'
                         }
                     })
                 }}
-
-                    {{ form_row(form.title) }}
-
-                    <button type="submit" class="btn btn-primary">Mettre à jour</button>
+                    {% for locale, title in puzzle.getLocaleTitles %}
+                        <label for="puzzle_title_{{ locale }}">Title [{{ locale }}]</label>
+                        <input type="text" class="form-control" name="title[{{ locale }}]" id="puzzle_title_{{ locale }}" value="{{ title }}" />
+                    {% endfor %}
+                    <label for="puzzle_keywords">Keywords</label>
+                    <textarea class="form-control" name="keywords" id="puzzle_keywords">{{ puzzle.keywords }}</textarea>
+                    <button class="btn btn-primary" type="submit">
+                        Update
+                    </button>
                 {{ form_end(form) }}
             </div>
         </div>

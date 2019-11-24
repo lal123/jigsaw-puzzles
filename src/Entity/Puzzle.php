@@ -79,13 +79,13 @@ class Puzzle
     }
 
     /**
-     * @return string
+     * @return array
      */
-    public function getLocaleTitle($locale): ?string
+    public function getLocaleTitles(): ?array
     {
-        $title = json_decode($this->title, true);
+        $localeTitles = json_decode($this->title, true);
 
-        return $title[$locale];
+        return $localeTitles;
     }
 
     /**

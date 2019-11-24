@@ -1,5 +1,5 @@
 <?php 
-// src/Form/PuzzleType.php
+// src/Form/PuzzleCreateType.php
 namespace App\Form;
 
 use App\Entity\Puzzle;
@@ -10,7 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
-class PuzzleType extends AbstractType
+class PuzzleCreateType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {

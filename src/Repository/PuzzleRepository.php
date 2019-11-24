@@ -19,20 +19,28 @@ class PuzzleRepository extends ServiceEntityRepository
         return $this->findAll([], ['date' => 'DESC']);
     }
 
-    public function findLocaleExt($partner, $locale, $first, $limit, &$count) {
+    public function findLocaleExt($partner, $locale, $first, $limit, $query, &$count) {
 
         $query = $this->createQueryBuilder('p')
             ->andWhere("p.partner IN({$partner})")
             ->andWhere("p.locale = :locale OR p.locale = '*'")
             ->andWhere("p.published IS NOT NULL")
+            ->andWhere("p.title LIKE :query OR p.keywords LIKE :query")
             ->setParameter('locale', $locale)
-            ->orderBy('p.published', 'DESC')
-            ->setFirstResult($first)
-            ->setMaxResults($limit);
+            ->setParameter('query', "%{$query}%");
             /*
             ->getQuery()
             ->getResult();
     		*/
+        /*
+        if($query != '') {
+            $query = $query;
+        }
+        */
+
+        $query = $query->orderBy('p.published', 'DESC')
+            ->setFirstResult($first)
+            ->setMaxResults($limit);
 
 		$paginator = new Paginator($query, true);
 

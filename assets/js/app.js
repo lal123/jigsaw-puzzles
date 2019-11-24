@@ -13,6 +13,13 @@ const $ = require('jquery');
 // the bootstrap module doesn't export/return anything
 require('bootstrap');
 
+page = {
+    load: function(path, target) {
+        console.log('path', path, 'target', target);
+        return false;
+    }
+}
+
 $(document).ready(function () {
     $('.puzzle_edit_modal').click(function () {
         $('#modal-title').html("Edit a Puzzle");
@@ -26,6 +33,20 @@ $(document).ready(function () {
         });
     });
 });
+
+$(window).on('hashchange', function() {
+    console.log('hashchange', document.location.hash);
+    return load_from_hash(document.location.hash, false);
+});
+
+function load_from_hash(s, f) {
+    if(s.length > 1){
+        h = s.substring(1);
+        console.log('load_from_hash', h);
+        return page.load(h, 'test');
+    }
+    return true;
+}
 
 $(window).scroll(function(){
     var scroll = $(window).scrollTop();

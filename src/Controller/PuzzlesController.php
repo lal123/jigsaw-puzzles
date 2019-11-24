@@ -8,9 +8,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use App\Form\PuzzleType;
+use App\Form\PuzzleCreateType;
+use App\Form\PuzzleEditType;
 use App\Entity\Puzzle;
-//use App\EventListener\RequestListener;
 use App\Services\UrlTranslator;
 
 class PuzzlesController extends AbstractController
@@ -27,12 +27,16 @@ class PuzzlesController extends AbstractController
 
         $session = $request->getSession();
 
+        $session->set('listUrl', $request->getUri());
+
+        $query = $request->get('query');
+        
         $repository = $this->getDoctrine()->getRepository(Puzzle::class);
 
         $limit = 10;
         $first = ($page - 1) * $limit;
 
-        $puzzles = $repository->findLocaleExt("'%', '@'", $locale, $first, $limit, $count);
+        $puzzles = $repository->findLocaleExt("'%', '@'", $locale, $first, $limit, $query, $count);
 
         $pages = ceil($count / $limit);
 
@@ -40,6 +44,7 @@ class PuzzlesController extends AbstractController
             'count' => $count,
             'pages' => $pages,
             'page' => $page,
+            'query' => $query,
             'puzzles' => $puzzles,
             'locale_versions' => $urlTranslator->translate($request, $urlGenerator)
         ));
@@ -58,7 +63,7 @@ class PuzzlesController extends AbstractController
         $puzzle = new Puzzle();
         $puzzle->setTitle('No Name');
 
-        $form = $this->createForm(PuzzleType::class, $puzzle);
+        $form = $this->createForm(PuzzleCreateType::class, $puzzle);
 
         $form->handleRequest($request);
 
@@ -97,23 +102,33 @@ class PuzzlesController extends AbstractController
      */
     public function edit(Request $request, Puzzle $puzzle, UrlGeneratorInterface $urlGenerator, UrlTranslator $urlTranslator)
     {
-        $form = $this->createForm(PuzzleType::class, $puzzle);
+        $locale = $request->getLocale();
+
+        $session = $request->getSession();
+
+        $form = $this->createForm(PuzzleEditType::class, $puzzle);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
             $em = $this->getDoctrine()->getManager();
-            
+
+            $puzzle->setTitle(json_encode($request->get('title')));
+
+            $puzzle->setKeywords($request->get('keywords'));
+
             $now = new \DateTime();
             $puzzle->setUpdated($now);
 
             $em->flush();
 
-            return $this->redirectToRoute('your_puzzles_list');
+            return $this->redirect($session->get('listUrl'));
         }
 
         return $this->render('puzzles/edit.html.twig', array(
             'form' => $form->createView(),
+            'puzzle' => $puzzle,
             'locale_versions' => $urlTranslator->translate($request, $urlGenerator)
         ));
     }
@@ -126,7 +141,7 @@ class PuzzlesController extends AbstractController
      */
     public function edit_modal(Request $request, Puzzle $puzzle, UrlGeneratorInterface $urlGenerator, UrlTranslator $urlTranslator)
     {
-        $form = $this->createForm(PuzzleType::class, $puzzle, [
+        $form = $this->createForm(PuzzleCreateType::class, $puzzle, [
             'action' => $request->getUri()
         ]);
 
