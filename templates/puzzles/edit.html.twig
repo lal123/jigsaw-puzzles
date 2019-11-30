@@ -18,7 +18,7 @@
                     })
                 }}
                     {% for locale, title in puzzle.getLocaleTitles %}
-                        <label for="puzzle_title_{{ locale }}">Title [{{ locale }}]</label>
+                        <label for="puzzle_title_{{ locale }}">Title{% if puzzle.getLocaleTitles|length > 1 %} [{{ locale }}]{% endif %}</label>
                         <input type="text" class="form-control" name="title[{{ locale }}]" id="puzzle_title_{{ locale }}" value="{{ title }}" />
                     {% endfor %}
                     <label for="puzzle_keywords">Keywords</label>

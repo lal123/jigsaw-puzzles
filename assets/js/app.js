@@ -14,13 +14,37 @@ const $ = require('jquery');
 require('bootstrap');
 
 page = {
+    
+    call: function(h) {
+        console.log('page.call', h);
+        document.location.href = '/#' + h.substring(1);
+        return false;
+    },
+
+    from_hash: function(s) {
+        console.log('page.from_hash', s);
+        if(s.length > 1) {
+            h = s.substring(1);
+            return page.load(h, 'central-content');
+        }
+        return true;
+    },
+
     load: function(path, target) {
-        console.log('path', path, 'target', target);
+        console.log('page.load', path, target);
+        $.ajax({
+            type: 'get',
+            url: '/' + path,
+            success: function (data) {
+                $('#' + target).html(data);
+            }
+        });
         return false;
     }
 }
 
 $(document).ready(function () {
+    page.from_hash(document.location.hash);
     $('.puzzle_edit_modal').click(function () {
         $('#modal-title').html("Edit a Puzzle");
         $.ajax({
@@ -36,17 +60,8 @@ $(document).ready(function () {
 
 $(window).on('hashchange', function() {
     console.log('hashchange', document.location.hash);
-    return load_from_hash(document.location.hash, false);
+    return page.from_hash(document.location.hash);
 });
-
-function load_from_hash(s, f) {
-    if(s.length > 1){
-        h = s.substring(1);
-        console.log('load_from_hash', h);
-        return page.load(h, 'test');
-    }
-    return true;
-}
 
 $(window).scroll(function(){
     var scroll = $(window).scrollTop();

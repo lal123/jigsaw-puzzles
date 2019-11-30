@@ -1,12 +1,16 @@
 # translations/messages.fr.yaml
 Main Domain: jeu-de-puzzle
-main.title: Jeu-de-Puzzle
+main.title: Jeu de Puzzle
 Home: Accueil
 Your Puzzles: Vos Puzzles
 Create a puzzle: Créer un puzzle
 puzzle.edit.title: Editer le puzzle
 help.characters: 4 à 24 caractères
 help.email: Veuillez indiquer une adresse e-mail valide
+
+page.home.hash: accueil
+page.yourpuzzles.list.hash: vos-puzzles
+
 player.create.title: Créer un compte
 player.label.name: Nom de joueur
 player.label.password: Mot de passe

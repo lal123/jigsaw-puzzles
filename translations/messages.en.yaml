@@ -1,12 +1,16 @@
 # translations/messages.en.yaml
 Main Domain: jigsaw-puzzles
-main.title: Jigsaw-Puzzles
+main.title: Jigsaw Puzzles
 Home: Home
 Your Puzzles: Your Puzzles
 Create a puzzle: Create a puzzle
 puzzle.edit.title: Editing the puzzle
 help.characters: 4 to 24 characters
 help.email: Please provide a valid email address
+
+page.home.hash: home
+page.yourpuzzles.list.hash: your-puzzles
+
 player.create.title: Create an account
 player.label.name: Player name
 player.label.password: Password

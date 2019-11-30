@@ -27,7 +27,7 @@
         
         <div style="height: 100px">
             <!-- <img src="{{ asset('build/img/logo_' ~ app.request.locale ~ '.png') }}" alt="" /> -->
-            <div class="site-title"><a href="/">{% trans %}main.title{% endtrans %}</a></div>
+            <div class="site-title"><a href="{{ path('homepage') }}" onclick="return page.call('/{% trans %}page.home.hash{% endtrans %}'); return false;">{% trans %}main.title{% endtrans %}</a></div>
         </div>
         <nav class="navbar navbar-expand-lg navbar-light bg-light" id="top-navbar">
           <a class="navbar-brand main" href="/">{% trans %}main.title{% endtrans %}</a>
@@ -39,10 +39,10 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
               <li class="nav-item{% if path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) == path('homepage') %} active{% endif %}">
-                <a class="nav-link" href="{{ path('homepage') }}">{% trans %}Home{% endtrans %} <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="{{ path('homepage') }}" onclick="return page.call('/{% trans %}page.home.hash{% endtrans %}'); return false;">{% trans %}Home{% endtrans %}<span class="sr-only">(current)</span></a>
               </li>
-              <li class="nav-item{% if path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) == path('your_puzzles_list') %} active{% endif %}">
-                <a class="nav-link" href="{{ path('your_puzzles_list') }}">{% trans %}Your Puzzles{% endtrans %}</a>
+              <li class="nav-item{% if path(app.request.attributes.get('_route')) == path('your_puzzles_list') %} active{% endif %}">
+                <a class="nav-link" href="{{ path('your_puzzles_list') }}" onclick="return page.call('/{% trans %}page.yourpuzzles.list.hash{% endtrans %}'); return false;">{% trans %}Your Puzzles{% endtrans %}</a>
               </li>
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

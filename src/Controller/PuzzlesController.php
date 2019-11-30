@@ -40,7 +40,9 @@ class PuzzlesController extends AbstractController
 
         $pages = ceil($count / $limit);
 
-        return $this->render('puzzles/list.html.twig', array(
+        $template = $request->isXmlHttpRequest() ? 'puzzles/list.content.html.twig' : 'puzzles/list.html.twig';
+        
+        return $this->render($template, array(
             'count' => $count,
             'pages' => $pages,
             'page' => $page,
@@ -139,7 +141,7 @@ class PuzzlesController extends AbstractController
      *      "fr": "/vos-puzzles/editer-modal/{id<\d+>}"
      * }, name="your_puzzles_edit_modal")
      */
-    public function edit_modal(Request $request, Puzzle $puzzle, UrlGeneratorInterface $urlGenerator, UrlTranslator $urlTranslator)
+    public function edit_modal(Request $request, Puzzle $puzzle)
     {
         $form = $this->createForm(PuzzleCreateType::class, $puzzle, [
             'action' => $request->getUri()
@@ -154,8 +156,7 @@ class PuzzlesController extends AbstractController
         }
 
         return $this->render('puzzles/edit_modal.html.twig', array(
-            'form' => $form->createView(),
-            'locale_versions' => $urlTranslator->translate($request, $urlGenerator)
+            'form' => $form->createView()
         ));
     }
 

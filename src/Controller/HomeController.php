@@ -12,18 +12,24 @@ use App\Services\ComplexObject;
 use App\Services\UrlTranslator;
 use Twig\Environment;
 
-class HelloController extends AbstractController
+class HomeController extends AbstractController
 {
     /**
      * Homepage
      *
-     * @Route("/", name="homepage")
+     * @Route("/",  name="homepage")
+     * @Route({
+     *      "en": "/home",
+     *      "fr": "/accueil"
+     * },  name="locale_homepage")
      */
     public function home(Request $request, UrlGeneratorInterface $urlGenerator, UrlTranslator $urlTranslator, ComplexObject $foo1, Environment $twig)
     {
-        return $this->redirectToRoute('your_puzzles_list');
+        //return $this->redirectToRoute('your_puzzles_list');
 
-        return $this->render('index.html.twig', array(
+        $template = $request->isXmlHttpRequest() ? 'index.content.html.twig' : 'index.html.twig';
+
+        return $this->render($template, array(
             'locale_versions' => $urlTranslator->translate($request, $urlGenerator)
         ));
 

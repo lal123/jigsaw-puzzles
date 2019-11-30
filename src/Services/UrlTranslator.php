@@ -25,7 +25,7 @@ class UrlTranslator
             //var_dump($request->attributes);die();
             $params = $request->get('_route_params');
             //$params['query'] = $request->get('query');
-            $params['_locale'] = $locale;
+            //$params['_locale'] = $locale;
             $locale_versions[$locale] = ['url'=> $request->getScheme() . '://' . $settings['domain_name'] . $urlGenerator->generate($request->attributes->get('_route'), $params), 'label'=> $settings['label']];
         }
         return $locale_versions;
