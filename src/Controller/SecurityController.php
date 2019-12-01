@@ -115,7 +115,9 @@ class SecurityController extends AbstractController
 	        }
         }
 
-        return $this->render('security/register.html.twig', [
+        $template = $request->isXmlHttpRequest() ? 'security/register.content.html.twig' : 'security/register.html.twig';
+
+        return $this->render($template, [
         	'form' => $form->createView(),
             'locale_versions' => $urlTranslator->translate($request, $urlGenerator),
         ]);

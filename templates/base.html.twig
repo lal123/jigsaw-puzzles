@@ -1,6 +1,6 @@
 {% set player = app.session.get('player') %}
 <!DOCTYPE html>
-<html>
+<html lang="{{ app.request.locale }}">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -27,7 +27,7 @@
         
         <div style="height: 100px">
             <!-- <img src="{{ asset('build/img/logo_' ~ app.request.locale ~ '.png') }}" alt="" /> -->
-            <div class="site-title"><a href="{{ path('homepage') }}" onclick="return page.call('/{% trans %}page.home.hash{% endtrans %}'); return false;">{% trans %}main.title{% endtrans %}</a></div>
+            <div class="site-title"><a href="{{ path('homepage') }}" onclick="return page.call('/{% trans %}page.homepage.hash{% endtrans %}'); return false;">{% trans %}main.title{% endtrans %}</a></div>
         </div>
         <nav class="navbar navbar-expand-lg navbar-light bg-light" id="top-navbar">
           <a class="navbar-brand main" href="/">{% trans %}main.title{% endtrans %}</a>
@@ -39,9 +39,9 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
               <li class="nav-item{% if path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) == path('homepage') %} active{% endif %}">
-                <a class="nav-link" href="{{ path('homepage') }}" onclick="return page.call('/{% trans %}page.home.hash{% endtrans %}'); return false;">{% trans %}Home{% endtrans %}<span class="sr-only">(current)</span></a>
+                <a class="nav-link menu-item" href="{{ path('homepage') }}" onclick="return page.call('/{% trans %}page.homepage.hash{% endtrans %}'); return false;">{% trans %}Home{% endtrans %}<span class="sr-only">(current)</span></a>
               </li>
-              <li class="nav-item{% if path(app.request.attributes.get('_route')) == path('your_puzzles_list') %} active{% endif %}">
+              <li class="nav-item{% if path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) == path('your_puzzles_list') %} active{% endif %}">
                 <a class="nav-link" href="{{ path('your_puzzles_list') }}" onclick="return page.call('/{% trans %}page.yourpuzzles.list.hash{% endtrans %}'); return false;">{% trans %}Your Puzzles{% endtrans %}</a>
               </li>
               <li class="nav-item dropdown">
@@ -73,7 +73,7 @@
                 </div>
 {% else %}
               <li class="nav-item{% if path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) == path('app_register') %} active{% endif %}">
-                <a class="nav-link" href="{{ path('app_register') }}"><span class="glyphicon glyphicon-user"></span>{% trans %}player.create.title{% endtrans %}</a>
+                <a class="nav-link" href="{{ path('app_register') }}" onclick="return page.call('/{% trans %}page.register.hash{% endtrans %}'); return false;"><span class="glyphicon glyphicon-user"></span>{% trans %}player.create.title{% endtrans %}</a>
               </li>
               <li class="nav-item{% if path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) == path('app_login') %} active{% endif %}">
                 <a class="nav-link" href="{{ path('app_login') }}"><span class="glyphicon glyphicon-log-in"></span>{% trans %}player.sign_in.title{% endtrans %}</a>
@@ -90,7 +90,7 @@
             </ul>
           </div>
         </nav>
-        <div class="container" id="central-content">
+        <div class="container" id="central-content" style="height: auto;">
             {% block menu %}{% endblock %}
             {% block body %}{% endblock %}
     		{% block editPuzzle %}{%endblock%}

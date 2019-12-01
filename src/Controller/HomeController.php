@@ -15,65 +15,35 @@ use Twig\Environment;
 class HomeController extends AbstractController
 {
     /**
-     * Homepage
+     * Index
      *
-     * @Route("/",  name="homepage")
-     * @Route({
-     *      "en": "/home",
-     *      "fr": "/accueil"
-     * },  name="locale_homepage")
+     * @Route("/",  name="index")
      */
-    public function home(Request $request, UrlGeneratorInterface $urlGenerator, UrlTranslator $urlTranslator, ComplexObject $foo1, Environment $twig)
+    public function index(Request $request, UrlGeneratorInterface $urlGenerator, UrlTranslator $urlTranslator, ComplexObject $foo1, Environment $twig)
     {
-        //return $this->redirectToRoute('your_puzzles_list');
 
         $template = $request->isXmlHttpRequest() ? 'index.content.html.twig' : 'index.html.twig';
 
         return $this->render($template, array(
             'locale_versions' => $urlTranslator->translate($request, $urlGenerator)
         ));
-
-        $request = Request::createFromGlobals();
-       
-        $name = $request->get('name');
-
-        $foo2 = new ComplexObject('toto', $_ENV['APP_ENV']);
-
-        $content = $twig->render('index.html.twig',
-            [
-                'name' => $name
-            . ' (' . $foo1->getFoo() . ')'
-            . ' {' . $foo1->getEnv() . '}'
-            . ' (' . $foo2->getFoo() . ')'
-            . ' {' . $foo2->getEnv() . '}'
-            . ' [' .__METHOD__ . ']'
-            ]
-        );
-
-        $response = new Response($content);
-
-        /*$response->setStatusCode(Response::HTTP_OK);
-        $response->headers->set('Content-Type', 'text/html');*/
-
-        return $response;
     }
 
-    // without annotation, see config/routes.yaml
-    public function showBlogPost($postId = 1)
+    /**
+     * Homepage
+     *
+     * @Route({
+     *      "en": "/home",
+     *      "fr": "/accueil"
+     * },  name="homepage")
+     */
+    public function home(Request $request, UrlGeneratorInterface $urlGenerator, UrlTranslator $urlTranslator, ComplexObject $foo1, Environment $twig)
     {
+        $template = $request->isXmlHttpRequest() ? 'homepage.content.html.twig' : 'homepage.html.twig';
 
-        $request = Request::createFromGlobals();
-
-        $url = $request->getPathInfo();
-        
-        $response = new Response();
-
-        $response->setContent('<html><body>Article '
-            . $postId
-            . ' (' . $url . ')'
-            .'</body></html>'
-        );
-       
-        return $response;
+        return $this->render($template, array(
+            'locale_versions' => $urlTranslator->translate($request, $urlGenerator)
+        ));
     }
+
 }

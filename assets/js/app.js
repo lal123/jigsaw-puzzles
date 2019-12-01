@@ -15,6 +15,8 @@ require('bootstrap');
 
 page = {
     
+    locale : $('html').attr('lang'),
+
     call: function(h) {
         console.log('page.call', h);
         document.location.href = '/#' + h.substring(1);
@@ -37,25 +39,48 @@ page = {
             url: '/' + path,
             success: function (data) {
                 $('#' + target).html(data);
+                page.menu_sync(path);
+                $('.modal-backdrop').hide();
             }
         });
         return false;
+    },
+
+    menu_sync: function(path) {
+        console.log('menu_sync', path);
+        var items = $('.menu-item');
+        $.each(items, function(index, el) {
+            console.log('item', $(el).attr("href"))
+        });
+    }
+}
+
+puzzles = {
+
+    edit_modal: function(post_url, post_data, callback) {
+        $('#modal-title').html("Edit a Puzzle");
+        $.ajax({
+            type: 'post',
+            url: post_url,
+            data: post_data,
+            success: function (data) {
+                $('#modal-body').html(data);
+                $('#puzzleEditModal').modal("show");
+                callback();
+            }
+        });
+        return false;        
     }
 }
 
 $(document).ready(function () {
-    page.from_hash(document.location.hash);
-    $('.puzzle_edit_modal').click(function () {
-        $('#modal-title').html("Edit a Puzzle");
-        $.ajax({
-            type: 'post',
-            url: this.href,
-            success: function (data) {
-                $('#modal-body').html(data);
-                $('#puzzleEditModal').modal("show");
-            }
-        });
-    });
+    if(document.location.hash.length > 1) {
+        page.from_hash(document.location.hash);
+    } else {
+        var pathname = document.location.pathname;
+        if(pathname == '/') pathname = page.locale == 'fr' ? '/accueil' : '/home';
+        page.call(pathname);
+    }
 });
 
 $(window).on('hashchange', function() {

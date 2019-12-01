@@ -8,8 +8,11 @@ puzzle.edit.title: Editer le puzzle
 help.characters: 4 à 24 caractères
 help.email: Veuillez indiquer une adresse e-mail valide
 
-page.home.hash: accueil
+page.index.title: Index
+page.homepage.hash: accueil
+page.homepage.title: Accueil
 page.yourpuzzles.list.hash: vos-puzzles
+page.register.hash: joueur/creer-un-compte
 
 player.create.title: Créer un compte
 player.label.name: Nom de joueur

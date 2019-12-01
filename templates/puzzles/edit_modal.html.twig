@@ -5,6 +5,7 @@
             <div class="row">
                 {{ form_start(form, {
                     'attr': {
+                        'onsubmit': "return puzzles.edit_modal(this.action, {'puzzle_create[title]': document.getElementById('puzzle_create_title').value, 'puzzle_create[keywords]': document.getElementById('puzzle_create_keywords').value, 'puzzle_create[_token]': document.getElementById('puzzle_create__token').value}, function(){ page.from_hash(document.location.hash); }); return false;",
                         'novalidate': 'novalidate',
                         'class': 'col-lg-5'
                         }

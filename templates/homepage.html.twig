@@ -1,0 +1,9 @@
+{# /templates/index.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}{% trans %}page.homepage.title{% endtrans %}{% endblock %}
+
+{% block body %}
+    {% include 'homepage.content.html.twig' %}
+{% endblock %}

@@ -152,7 +152,7 @@ class PuzzlesController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('your_puzzles_list');
+            //return $this->redirectToRoute('your_puzzles_list');
         }
 
         return $this->render('puzzles/edit_modal.html.twig', array(
