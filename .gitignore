@@ -10,8 +10,8 @@
 
 ###> symfony/webpack-encore-bundle ###
 /node_modules/
-!/public/build/.htaccess
 /public/build/
+!/public/build/.htaccess
 npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-bundle ###
