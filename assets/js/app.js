@@ -24,15 +24,16 @@ page = {
         return false;
     },
 
-    post: function(form, target) {
+    post: function(form, target, static) {
         var path = form.action;
-        console.log('page.post', $(form).serialize(), path, target);
+        console.log('page.post', $(form).serialize(), path, target, static);
         $.ajax({
             type: 'post',
             url: path,
             data: $(form).serialize(),
             success: function (data) {
                 $('#' + target).html(data);
+                if(!static) page.load('top-navbar', 'top-navbar', true);
                 page.menu_sync(path);
             }
         });
@@ -48,13 +49,14 @@ page = {
         return true;
     },
 
-    load: function(path, target) {
+    load: function(path, target, static) {
         console.log('page.load', path, target);
         $.ajax({
             type: 'get',
             url: '/' + path,
             success: function (data) {
                 $('#' + target).html(data);
+                if(!static) page.load('top-navbar', 'top-navbar', true);
                 page.menu_sync('/' + path);
                 $('.modal-backdrop').hide();
             }

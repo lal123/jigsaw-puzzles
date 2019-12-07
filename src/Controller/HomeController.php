@@ -30,6 +30,16 @@ class HomeController extends AbstractController
     }
 
     /**
+     * @Route("/top-navbar",  name="top-navbar")
+     */
+    public function topNavbar(Request $request, UrlGeneratorInterface $urlGenerator, UrlTranslator $urlTranslator)
+    {
+        return $this->render('top-navbar.html.twig', array(
+            'locale_versions' => $urlTranslator->translate($request, $urlGenerator)
+        ));
+    }
+
+    /**
      * Homepage
      *
      * @Route({
