@@ -24,12 +24,12 @@ page = {
         return false;
     },
 
-    post: function(elForm, target) {
-        console.log('page.post', $(elForm).serialize(), target);
+    post: function(form, target) {
+        console.log('page.post', $(form).serialize(), target);
         $.ajax({
             type: 'post',
-            url: '/player/forgotten-password',
-            data: $(elForm).serialize(),
+            url: form.action,
+            data: $(form).serialize(),
             success: function (data) {
                 $('#' + target).html(data);
             }
