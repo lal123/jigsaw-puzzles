@@ -1,4 +1,4 @@
-<form method="post" class="col-lg-5">
+<form method="post" class="col-lg-5" action="{{ path('app_login') }}" onsubmit="return page.post(this, 'central-content'); return false;">
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" />
     {% if error %}
         <div class="alert alert-danger">{% trans %}player.error.login.invalid{% endtrans %}{#{ error.messageKey|trans(error.messageData, 'security') }#}</div>
