@@ -38,7 +38,9 @@ class SecurityController extends AbstractController
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
 
-        return $this->render('security/login.html.twig', [
+        $template = $request->isXmlHttpRequest() ? 'security/login.content.html.twig' : 'security/login.html.twig';
+
+        return $this->render($template, [
         	'last_username' => $lastUsername,
         	'error' => $error,
             'locale_versions' => $urlTranslator->translate($request, $urlGenerator),
@@ -263,7 +265,9 @@ class SecurityController extends AbstractController
 			}
         }
 
-        return $this->render('security/forgotten_password.html.twig', [
+        $template = $request->isXmlHttpRequest() ? 'security/forgotten_password.content.html.twig' : 'security/forgotten_password.html.twig';
+
+        return $this->render($template, [
             'form' => $form->createView(),
             'locale_versions' => $urlTranslator->translate($request, $urlGenerator),
         ]);

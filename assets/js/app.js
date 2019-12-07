@@ -18,8 +18,22 @@ page = {
     locale : $('html').attr('lang'),
 
     call: function(h) {
+        return true;
         console.log('page.call', h);
         document.location.href = '/#' + h.substring(1);
+        return false;
+    },
+
+    post: function(elForm, target) {
+        console.log('page.post', $(elForm).serialize(), target);
+        $.ajax({
+            type: 'post',
+            url: '/player/forgotten-password',
+            data: $(elForm).serialize(),
+            success: function (data) {
+                $('#' + target).html(data);
+            }
+        });
         return false;
     },
 

@@ -12,7 +12,13 @@ page.index.title: Index
 page.homepage.hash: accueil
 page.homepage.title: Accueil
 page.yourpuzzles.list.hash: vos-puzzles
+page.yourpuzzles.list.title: Vos Puzzles
 page.register.hash: joueur/creer-un-compte
+page.register.title: Créer un compte
+page.login.hash: joueur/se-connecter
+page.login.title: Se connecter
+page.forgotten_password.hash: joueur/mot-de-passe-oublie
+page.forgotten_password.title: Mot de passe oublié
 
 player.create.title: Créer un compte
 player.label.name: Nom de joueur
@@ -23,7 +29,7 @@ player.label.email: E-mail
 player.label.create: Créer
 player.label.login: Se connecter
 player.label.update: Mettre à jour
-player.label.send_email: Envoyer
+player.label.send_email: Envoyer le mail
 player.update.title: Votre compte
 player.sign_in.title: Se connecter
 player.sign_out.title: Se déconnecter
