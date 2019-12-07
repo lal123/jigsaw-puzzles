@@ -33,8 +33,10 @@ page = {
             data: $(form).serialize(),
             success: function (data) {
                 $('#' + target).html(data);
-                if(!static) page.load('top-navbar', 'top-navbar', true);
-                page.menu_sync(path);
+                if(!static) {
+                    page.load('top-navbar', 'top-navbar', true);
+                    //page.menu_sync(path);
+                }
             }
         });
         return false;
@@ -56,8 +58,10 @@ page = {
             url: '/' + path,
             success: function (data) {
                 $('#' + target).html(data);
-                if(!static) page.load('top-navbar', 'top-navbar', true);
-                page.menu_sync('/' + path);
+                if(!static) { 
+                    page.load('top-navbar', 'top-navbar', true);
+                    //page.menu_sync('/' + path);
+                }
                 $('.modal-backdrop').hide();
             }
         });
