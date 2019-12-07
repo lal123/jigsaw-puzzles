@@ -18,7 +18,7 @@ page = {
     locale : $('html').attr('lang'),
 
     call: function(h) {
-        return true;
+        //return true;
         console.log('page.call', h);
         document.location.href = '/#' + h.substring(1);
         return false;
