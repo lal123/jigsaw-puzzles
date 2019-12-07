@@ -60,11 +60,23 @@ page = {
             success: function (data) {
                 $('#' + target).html(data);
                 if(!static) { 
-                    page.load('top-navbar', 'top-navbar', true);
+                    page.load_navbar('top-navbar', 'top-navbar', true);
                 } else {
                     page.menu_sync('/' + path);
                 }
                 $('.modal-backdrop').hide();
+            }
+        });
+        return false;
+    },
+
+    load_navbar: function(path, target, static) {
+        console.log('page.load_navbar', path, target);
+        $.ajax({
+            type: 'get',
+            url: '/' + path,
+            success: function (data) {
+                $('#' + target).html(data);
             }
         });
         return false;
