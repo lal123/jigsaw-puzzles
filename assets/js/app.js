@@ -24,16 +24,16 @@ page = {
         return false;
     },
 
-    post: function(form, target, static) {
+    post: function(form, target, refresh) {
         var path = form.action;
-        console.log('page.post', $(form).serialize(), path, target, static);
+        console.log('page.post', $(form).serialize(), path, target, refresh);
         $.ajax({
             type: 'post',
             url: path,
             data: $(form).serialize(),
             success: function (data) {
                 $('#' + target).html(data);
-                if(!static) {
+                if(refresh) {
                     page.load('top-navbar', 'top-navbar', true);
                 } else {
                     page.menu_sync(path);
@@ -52,15 +52,15 @@ page = {
         return true;
     },
 
-    load: function(path, target, static) {
+    load: function(path, target, refresh) {
         console.log('page.load', path, target);
         $.ajax({
             type: 'get',
             url: '/' + path,
             success: function (data) {
                 $('#' + target).html(data);
-                if(!static) { 
-                    page.load_navbar('top-navbar', 'top-navbar', true);
+                if(refresh) { 
+                    page.load_navbar('top-navbar', 'top-navbar');
                 } else {
                     page.menu_sync('/' + path);
                 }
@@ -70,7 +70,7 @@ page = {
         return false;
     },
 
-    load_navbar: function(path, target, static) {
+    load_navbar: function(path, target) {
         console.log('page.load_navbar', path, target);
         $.ajax({
             type: 'get',
