@@ -25,13 +25,15 @@ page = {
     },
 
     post: function(form, target) {
-        console.log('page.post', $(form).serialize(), target);
+        var path = form.action;
+        console.log('page.post', $(form).serialize(), path, target);
         $.ajax({
             type: 'post',
-            url: form.action,
+            url: path,
             data: $(form).serialize(),
             success: function (data) {
                 $('#' + target).html(data);
+                page.menu_sync(path);
             }
         });
         return false;
@@ -53,7 +55,7 @@ page = {
             url: '/' + path,
             success: function (data) {
                 $('#' + target).html(data);
-                page.menu_sync(path);
+                page.menu_sync('/' + path);
                 $('.modal-backdrop').hide();
             }
         });
@@ -63,8 +65,12 @@ page = {
     menu_sync: function(path) {
         console.log('menu_sync', path);
         var items = $('.menu-item');
+        items.removeClass('active');
         $.each(items, function(index, el) {
-            console.log('item', $(el).attr("href"))
+            console.log('item', $(el).attr("href"), path)
+            if($(el).attr("href") == path) {
+                $(el).addClass('active');
+            }
         });
     }
 }

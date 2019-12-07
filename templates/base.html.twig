@@ -42,7 +42,7 @@
                 <a class="nav-link menu-item" href="{{ path('homepage') }}" onclick="return page.call('/{% trans %}page.homepage.hash{% endtrans %}'); return false;">{% trans %}Home{% endtrans %}<span class="sr-only">(current)</span></a>
               </li>
               <li class="nav-item{% if path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) == path('your_puzzles_list') %} active{% endif %}">
-                <a class="nav-link" href="{{ path('your_puzzles_list') }}" onclick="return page.call('/{% trans %}page.yourpuzzles.list.hash{% endtrans %}'); return false;">{% trans %}Your Puzzles{% endtrans %}</a>
+                <a class="nav-link menu-item" href="{{ path('your_puzzles_list') }}" onclick="return page.call('/{% trans %}page.yourpuzzles.list.hash{% endtrans %}'); return false;">{% trans %}Your Puzzles{% endtrans %}</a>
               </li>
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -68,15 +68,15 @@
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle{% if path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) == path('app_edit_account') %} active{% endif %}" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user"></span>{{ app.user.username }}&nbsp;</a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item{% if path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) == path('app_edit_account') %} active{% endif %}" href="{{ path('app_edit_account') }}">{% trans %}player.update.title{% endtrans %}</a>
+                    <a class="dropdown-item{% if path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) == path('app_edit_account') %} active{% endif %}" href="{{ path('app_edit_account') }}" onclick="return page.call('/{% trans %}page.update.hash{% endtrans %}'); return false;">{% trans %}player.update.title{% endtrans %}</a>
                     <a class="dropdown-item" href="{{ path('app_logout') }}"><span class="glyphicon glyphicon-log-out"></span>{% trans %}player.sign_out.title{% endtrans %}</a>
                 </div>
 {% else %}
               <li class="nav-item{% if path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) == path('app_register') %} active{% endif %}">
-                <a class="nav-link" href="{{ path('app_register') }}" onclick="return page.call('/{% trans %}page.register.hash{% endtrans %}'); return false;"><span class="glyphicon glyphicon-user"></span>{% trans %}player.create.title{% endtrans %}</a>
+                <a class="nav-link menu-item" href="{{ path('app_register') }}" onclick="return page.call('/{% trans %}page.register.hash{% endtrans %}'); return false;"><span class="glyphicon glyphicon-user"></span>{% trans %}player.create.title{% endtrans %}</a>
               </li>
               <li class="nav-item{% if path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) == path('app_login') %} active{% endif %}">
-                <a class="nav-link" href="{{ path('app_login') }}" onclick="return page.call('/{% trans %}page.login.hash{% endtrans %}'); return false;"><span class="glyphicon glyphicon-log-in"></span>{% trans %}player.sign_in.title{% endtrans %}</a>
+                <a class="nav-link menu-item" href="{{ path('app_login') }}" onclick="return page.call('/{% trans %}page.login.hash{% endtrans %}'); return false;"><span class="glyphicon glyphicon-log-in"></span>{% trans %}player.sign_in.title{% endtrans %}</a>
               </li>
 {% endif %}
               <li class="nav-item dropdown lang-select">

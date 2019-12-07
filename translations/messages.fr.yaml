@@ -21,6 +21,8 @@ page.forgotten_password.hash: joueur/mot-de-passe-oublie
 page.forgotten_password.title: Mot de passe oublié
 page.reset_password.hash: joueur/changement-mot-de-passe
 page.reset_password.title: Changement du mot de passe
+page.update.hash: joueur/votre-compte
+page.update.title: Votre compte
 
 player.create.title: Créer un compte
 player.label.name: Nom de joueur
@@ -32,7 +34,6 @@ player.label.create: Créer
 player.label.login: Se connecter
 player.label.update: Mettre à jour
 player.label.send_email: Envoyer le mail
-player.update.title: Votre compte
 player.sign_in.title: Se connecter
 player.sign_out.title: Se déconnecter
 player.error.name.invalid: Nom de joueur invalide
@@ -42,6 +43,7 @@ player.error.confirm.invalid: Erreur de confirmation
 player.error.email.exists: Cet e-mail est déjà utilisé
 player.error.login.invalid: Nom de joueur ou mot de passe invalide
 player.error.email.unknown: Adresse e-mail inconnue
+player.update.title: Votre compte
 player.update.success: Votre compte a bien été mis à jour
 player.delete.title: Supprimer le compte
 Invalid credentials.: Identifiants invalides

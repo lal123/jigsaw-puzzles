@@ -21,6 +21,8 @@ page.forgotten_password.hash: player/forgotten-password
 page.forgotten_password.title: Forgotten password
 page.reset_password.hash: player/reset-password
 page.reset_password.title: Reset password
+page.update.hash: player/your-account
+page.update.title: Your account
 
 player.create.title: Create an account
 player.label.name: Player name
@@ -32,7 +34,6 @@ player.label.create: Create
 player.label.login: Sign in
 player.label.update: Update
 player.label.send_email: Send the e-mail
-player.update.title: Your account
 player.sign_in.title: Sign in
 player.sign_out.title: Sign out
 player.error.name.invalid: Invalid player name
@@ -42,6 +43,7 @@ player.error.confirm.invalid: Confirmation error
 player.error.email.exists: This email is already used
 player.error.login.invalid: Invalid player name or password
 player.error.email.unknown: Unknown email address
+player.update.title: Your account
 player.update.success: Your account has been updated
 player.delete.title: Delete account
 Invalid credentials.: Invalid identifiers
