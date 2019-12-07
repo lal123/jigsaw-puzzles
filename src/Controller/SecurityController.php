@@ -299,7 +299,7 @@ class SecurityController extends AbstractController
                 $this->addFlash('danger', 'Token Inconnu');
             } else {
                 $user->setToken(null);
-                $user->setPassword($passwordEncoder->encodePassword($user, $user->get('password')));
+                $user->setPassword($passwordEncoder->encodePassword($user, $form->get('password')->getData())));
                 $entityManager->flush();
                 $this->addFlash('notice', 'Mot de passe mis à jour');
             }
