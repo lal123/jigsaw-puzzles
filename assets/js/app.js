@@ -35,7 +35,8 @@ page = {
                 $('#' + target).html(data);
                 if(!static) {
                     page.load('top-navbar', 'top-navbar', true);
-                    //page.menu_sync(path);
+                } else {
+                    page.menu_sync(path);
                 }
             }
         });
@@ -60,7 +61,8 @@ page = {
                 $('#' + target).html(data);
                 if(!static) { 
                     page.load('top-navbar', 'top-navbar', true);
-                    //page.menu_sync('/' + path);
+                } else {
+                    page.menu_sync('/' + path);
                 }
                 $('.modal-backdrop').hide();
             }
