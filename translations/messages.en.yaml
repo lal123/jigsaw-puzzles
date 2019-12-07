@@ -19,6 +19,8 @@ page.login.hash: player/sign-in
 page.login.title: Sign in
 page.forgotten_password.hash: player/forgotten-password
 page.forgotten_password.title: Forgotten password
+page.reset_password.hash: player/reset-password
+page.reset_password.title: Reset password
 
 player.create.title: Create an account
 player.label.name: Player name

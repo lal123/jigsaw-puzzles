@@ -18,6 +18,7 @@ use App\Entity\User;
 use App\Form\UserRegisterType;
 use App\Form\UserAccountType;
 use App\Form\UserForgottenPasswordType;
+use App\Form\UserResetPasswordType;
 
 class SecurityController extends AbstractController
 {
@@ -282,31 +283,38 @@ class SecurityController extends AbstractController
     public function resetPassword(Request $request, string $token, UserPasswordEncoderInterface $passwordEncoder, UrlGeneratorInterface $urlGenerator, UrlTranslator $urlTranslator, TranslatorInterface $translator)
     {
 
-        if ($request->isMethod('POST')) {
+        $user = new User();
+
+        $form = $this->createForm(UserResetPasswordType::class, $user);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
             $entityManager = $this->getDoctrine()->getManager();
 
             $user = $entityManager->getRepository(User::class)->findOneByToken($token);
-            /* @var $user User */
-
+//var_dump($user);die();
             if ($user === null) {
                 $this->addFlash('danger', 'Token Inconnu');
-                return $this->redirectToRoute('homepage');
+                //return $this->redirectToRoute('homepage');
+            } else {
+
+                $user->setToken(null);
+                $user->setPassword($passwordEncoder->encodePassword($user, $request->request->get('password')));
+                $entityManager->flush();
+
+                $this->addFlash('notice', 'Mot de passe mis à jour');
             }
-
-            $user->setToken(null);
-            $user->setPassword($passwordEncoder->encodePassword($user, $request->request->get('password')));
-            $entityManager->flush();
-
-            $this->addFlash('notice', 'Mot de passe mis à jour');
-
-            return $this->redirectToRoute('homepage');
-        }else {
-
-            return $this->render('security/reset_password.html.twig', [
-            	'token' => $token,
-	            'locale_versions' => $urlTranslator->translate($request, $urlGenerator),
-            ]);
+            //return $this->redirectToRoute('homepage');
         }
+
+        $template = $request->isXmlHttpRequest() ? 'security/reset_password.content.html.twig' : 'security/reset_password.html.twig';
+
+        return $this->render($template, [
+            'form' => $form->createView(),
+            'locale_versions' => $urlTranslator->translate($request, $urlGenerator),
+        ]);
 
     }
 }
