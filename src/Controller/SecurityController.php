@@ -294,19 +294,15 @@ class SecurityController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
 
             $user = $entityManager->getRepository(User::class)->findOneByToken($token);
-//var_dump($user);die();
+
             if ($user === null) {
                 $this->addFlash('danger', 'Token Inconnu');
-                //return $this->redirectToRoute('homepage');
             } else {
-
                 $user->setToken(null);
-                $user->setPassword($passwordEncoder->encodePassword($user, $request->request->get('password')));
+                $user->setPassword($passwordEncoder->encodePassword($user, $form->get('password')));
                 $entityManager->flush();
-
                 $this->addFlash('notice', 'Mot de passe mis à jour');
             }
-            //return $this->redirectToRoute('homepage');
         }
 
         $template = $request->isXmlHttpRequest() ? 'security/reset_password.content.html.twig' : 'security/reset_password.html.twig';

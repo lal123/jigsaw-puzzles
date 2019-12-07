@@ -40,7 +40,7 @@ player.error.name.exists: This player name already exists
 player.error.password.invalid: Invalid password
 player.error.confirm.invalid: Confirmation error
 player.error.email.exists: This email is already used
-player.error.login.invalid: Invalid player name or passwprd
+player.error.login.invalid: Invalid player name or password
 player.error.email.unknown: Unknown email address
 player.update.success: Your account has been updated
 player.delete.title: Delete account
