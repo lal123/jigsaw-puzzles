@@ -16,10 +16,14 @@ require('bootstrap');
 page = {
     
     locale : $('html').attr('lang'),
+    scroll: {},
 
-    call: function(h) {
+    call: function(h, p) {
         //return true;
-        console.log('page.call', h);
+        console.log('page.call', h, $(document).scrollTop());
+        if(p && p.scroll) {
+            page.scroll[document.location.href] = $(document).scrollTop();
+        }
         document.location.href = '/#' + h.substring(1);
         return false;
     },
@@ -69,7 +73,7 @@ page = {
         return true;
     },
 
-    load: function(path, target, refresh) {
+    load: function(path, target, refresh, params) {
         console.log('page.load', path, target);
         $.ajax({
             type: 'get',
@@ -82,6 +86,12 @@ page = {
                     page.menu_sync('/' + path);
                 }
                 $('.modal-backdrop').hide();
+                if(page.scroll[document.location.href] != 0) {
+                    $(document).ready(function() {
+                        $(document).scrollTop(page.scroll[document.location.href]);
+                        page.scroll[document.location.href] = 0;
+                    });
+                }
             }
         });
         return false;

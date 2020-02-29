@@ -29,7 +29,7 @@
                 <li>
                     {{ puzzle.localetitles()[app.request.locale] }}
                     <img src="/puzzles/preview/{{ app.request.locale }}/{{ puzzle.filename }}" style="max-width: 100px" alt="{{ puzzle.localetitles()[app.request.locale] }}" />
-                    | <a href="{{ path('your_puzzles_edit', {id: puzzle.id}, false) }}" onclick="return page.call('{{ path('your_puzzles_edit', {id: puzzle.id}, false) }}'); return false;">Edit</a>
+                    | <a href="{{ path('your_puzzles_edit', {id: puzzle.id}, false) }}" onclick="return page.call('{{ path('your_puzzles_edit', {id: puzzle.id}, false) }}', {'scroll': true}); return false;">Edit</a>
                     | <a class="puzzle_edit_modal" href="{{ path('your_puzzles_edit_modal', {id: puzzle.id}, false) }}" data-toggle="modal" onclick="return puzzles.edit_modal(this.href, {}, function(){}); return false;">Edit (modal)</a>
                     | <a href="{{ path('app_puzzles_delete', {id: puzzle.id}, false) }}">Delete</a>
                 </li>
