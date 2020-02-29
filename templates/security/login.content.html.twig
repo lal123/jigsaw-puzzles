@@ -24,5 +24,5 @@
 <br />
 <br />
 <div>
-    <a  href="{{ path('app_forgotten_password') }}" onclick="return page.call('/{% trans %}page.forgotten_password.hash{% endtrans %}'); return false;">{% trans %}page.forgotten_password.title{% endtrans %}</a>
+    <a  href="{{ path('app_forgotten_password') }}" onclick="return page.call('{{ path('app_forgotten_password') }}'); return false;">{% trans %}page.forgotten_password.title{% endtrans %}</a>
 </div>

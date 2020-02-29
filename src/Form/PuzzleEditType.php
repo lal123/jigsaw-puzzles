@@ -14,6 +14,19 @@ class PuzzleEditType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $builder
+            ->add('keywords', TextareaType::class, [
+                'help' => "Mots-clés du puzzle",
+                'mapped' => true,
+                'required' => true,
+                'attr' => [
+                    'maxlength' => 128
+                ]
+            ])
+            ->add('update', SubmitType::class, [
+                'label' => 'puzzle.edit.update.label',
+            ])
+        ;
     }
     
     public function configureOptions(OptionsResolver $resolver)

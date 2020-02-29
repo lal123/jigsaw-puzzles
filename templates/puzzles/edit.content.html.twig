@@ -1,0 +1,26 @@
+        <div class="container">
+            <h1>{% trans %}puzzle.edit.title{% endtrans %}</h1>
+        </div>
+        <div class="container">
+            <div class="row">
+                {{ form_errors(form) }}
+            </div>
+            <div class="row">
+                {{ form_start(form, {
+                    'attr': {
+                        'onsubmit': "return page.post2(this); return false;",
+                        'class': 'col-lg-5'
+                        }
+                    })
+                }}
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" />
+                    {% for locale, title in puzzle.getLocaleTitles %}
+                        <label for="puzzle_title_{{ locale }}">Title{% if puzzle.getLocaleTitles|length > 1 %} [{{ locale }}]{% endif %}</label>
+                        <input type="text" class="form-control" name="title[{{ locale }}]" id="puzzle_title_{{ locale }}" value="{{ title }}" />
+                    {% endfor %}
+                {{ form_end(form) }}
+            </div>
+            <div class="row">
+                <a href="{{ app.request.session.get('listUrl') }}" onclick="return page.call('{{ app.request.session.get('listUrl') }}'); return false;">Retour</a>
+            </div>
+        </div>

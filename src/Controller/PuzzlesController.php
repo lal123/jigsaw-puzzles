@@ -8,6 +8,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Form\FormError;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use App\Form\PuzzleCreateType;
 use App\Form\PuzzleEditType;
 use App\Entity\Puzzle;
@@ -27,7 +29,7 @@ class PuzzlesController extends AbstractController
 
         $session = $request->getSession();
 
-        $session->set('listUrl', $request->getUri());
+        $session->set('listUrl', $request->getRequestUri());
 
         $query = $request->get('query');
         
@@ -102,33 +104,64 @@ class PuzzlesController extends AbstractController
      *      "fr": "/vos-puzzles/editer/{id<\d+>}"
      * }, name="your_puzzles_edit")
      */
-    public function edit(Request $request, Puzzle $puzzle, UrlGeneratorInterface $urlGenerator, UrlTranslator $urlTranslator)
+    public function edit(Request $request, Puzzle $puzzle, UrlGeneratorInterface $urlGenerator, UrlTranslator $urlTranslator, TranslatorInterface $translator)
     {
         $locale = $request->getLocale();
 
         $session = $request->getSession();
 
-        $form = $this->createForm(PuzzleEditType::class, $puzzle);
+        $form = $this->createForm(PuzzleEditType::class, $puzzle, [
+            'action' => $request->getRequestUri()
+        ]);
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($request->getMethod() == 'POST') {
 
             $em = $this->getDoctrine()->getManager();
 
             $puzzle->setTitle(json_encode($request->get('title')));
+            
+            $keywords = $form->get('keywords')->getData();
+            if(strlen($keywords) < 5) {
+                $form->get('keywords')->addError(new FormError($translator->trans('puzzle.edit.keywords.error')));
+            } else {
+                $puzzle->setKeywords($keywords);
+            }
 
-            $puzzle->setKeywords($request->get('keywords'));
+            if(0 === count($form->getErrors(true, true))) {
+                $now = new \DateTime();
+                $puzzle->setUpdated($now);
 
-            $now = new \DateTime();
-            $puzzle->setUpdated($now);
+                $em->flush();
+                
+                if($request->isXmlHttpRequest()) {
+                    $response = new Response("page.call('{$session->get('listUrl')}')");
+                    $response->headers->set('Content-Type','text/javascript');
+                    return $response;
+                } else {
+                    return $this->redirect($session->get('listUrl'));               
+                }
 
-            $em->flush();
+            } else {
+                $form->addError(new FormError($translator->trans('puzzle.edit.keywords.error')));
+                if($request->isXmlHttpRequest()) {
+                    $data =  $this->renderView('puzzles/edit.content.html.twig', array(
+                        'form' => $form->createView(),
+                        'puzzle' => $puzzle,
+                        'locale_versions' => $urlTranslator->translate($request, $urlGenerator)
+                    ));
+                    $response = new Response("\$('#central-content').html(decodeURIComponent('" . rawurlencode($data). "'))");
+                    $response->headers->set('Content-Type','text/javascript');
+                    return $response;
+                }
+            }
 
-            return $this->redirect($session->get('listUrl'));
         }
 
-        return $this->render('puzzles/edit.html.twig', array(
+        $template = $request->isXmlHttpRequest() ? 'puzzles/edit.content.html.twig' : 'puzzles/edit.html.twig';
+        
+        return $this->render($template, array(
             'form' => $form->createView(),
             'puzzle' => $puzzle,
             'locale_versions' => $urlTranslator->translate($request, $urlGenerator)

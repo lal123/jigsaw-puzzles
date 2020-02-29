@@ -24,7 +24,7 @@ page = {
         return false;
     },
 
-    post: function(form, target, refresh) {
+    post: function(form, target, refresh, callback) {
         var path = form.action;
         console.log('page.post', $(form).serialize(), path, target, refresh);
         $.ajax({
@@ -38,6 +38,23 @@ page = {
                 } else {
                     page.menu_sync(path);
                 }
+                if(callback) {
+                    callback();
+                }
+            }
+        });
+        return false;
+    },
+
+    post2: function(form) {
+        var path = form.action;
+        console.log('page.post2', $(form).serialize());
+        $.ajax({
+            type: 'post',
+            url: path,
+            data: $(form).serialize(),
+            success: function (data) {
+                eval(data);
             }
         });
         return false;

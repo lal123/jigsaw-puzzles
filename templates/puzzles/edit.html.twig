@@ -5,28 +5,5 @@
 {% block title %}{% trans %}puzzle.edit.title{% endtrans %}{% endblock %}
 
 {% block body %}
-        <div class="container">
-            <h1>{% trans %}puzzle.edit.title{% endtrans %}</h1>
-        </div>
-        <div class="container">
-            <div class="row">
-                {{ form_start(form, {
-                    'attr': {
-                        'novalidate': 'novalidate',
-                        'class': 'col-lg-5'
-                        }
-                    })
-                }}
-                    {% for locale, title in puzzle.getLocaleTitles %}
-                        <label for="puzzle_title_{{ locale }}">Title{% if puzzle.getLocaleTitles|length > 1 %} [{{ locale }}]{% endif %}</label>
-                        <input type="text" class="form-control" name="title[{{ locale }}]" id="puzzle_title_{{ locale }}" value="{{ title }}" />
-                    {% endfor %}
-                    <label for="puzzle_keywords">Keywords</label>
-                    <textarea class="form-control" name="keywords" id="puzzle_keywords">{{ puzzle.keywords }}</textarea>
-                    <button class="btn btn-primary" type="submit">
-                        Update
-                    </button>
-                {{ form_end(form) }}
-            </div>
-        </div>
+        {% include 'puzzles/edit.content.html.twig' %}
 {% endblock %}
