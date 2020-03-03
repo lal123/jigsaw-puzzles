@@ -1,27 +1,11 @@
-/*
- * Welcome to your app's main JavaScript file!
- *
- * We recommend including the built version of this JavaScript file
- * (and its CSS file) in your base layout (base.html.twig).
- */
-
-// any CSS you require will output into a single css file (app.css in this case)
-require('../css/app.css');
-
-const $ = require('jquery');
-// this "modifies" the jquery module: adding behavior to it
-// the bootstrap module doesn't export/return anything
-require('bootstrap');
-
 page = {
     
     locale: $('html').attr('lang'),
-    lastYPos: {},
+    call_p: {},
 
-    call: function(h) {
-        console.log('call', h);
-        var yPos = $(document).scrollTop();
-        if(yPos != 0) page.lastYPos[document.location.href] = yPos;
+    call: function(h, p) {
+        if(p) console.log('call p', p);
+        page.call_p = p;
         document.location.href = '/#' + h.substring(1);
         return false;
     },
@@ -77,10 +61,10 @@ page = {
             url: '/' + path,
             success: function (data) {
                 $('#' + target).html(data);
-                console.log(page.lastYPos, document.location.href)
-                if(page.lastYPos && page.lastYPos[document.location.href]) {
-                    $(document).scrollTop(page.lastYPos[document.location.href]);
-                    page.lastYPos[document.location.href] = 0;
+                if(page.call_p && page.call_p.p_id) {
+                    $(document).scrollTop($('#p_' + page.call_p.p_id).offsetTop);
+                    console.log('ready', $('#p_' + page.call_p.p_id).offsetTop);
+                    page.call_p = {};
                 }
                 if(refresh) { 
                     page.load_navbar('top-navbar', 'top-navbar');

@@ -43,6 +43,26 @@ class Puzzle
     private $keywords;
 
     /**
+     * @ORM\Column(type="integer")
+     */
+    protected $img_w;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    protected $img_h;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    protected $red_w;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    protected $red_h;
+
+    /**
      * @ORM\Column(type="datetime")
      */
     protected $created;
@@ -166,6 +186,78 @@ class Puzzle
     public function setKeywords(string $keywords): self
     {
         $this->keywords = $keywords;
+
+        return $this;
+    }
+
+    /**
+     * @return integer
+     */
+    public function getImg_W(): ?string
+    {
+        return $this->img_w;
+    }
+
+    /**
+     * @param integer $img_w
+     */
+    public function setImg_W(string $img_w): self
+    {
+        $this->img_w = $img_w;
+
+        return $this;
+    }
+
+    /**
+     * @return integer
+     */
+    public function getImg_H(): ?string
+    {
+        return $this->img_h;
+    }
+
+    /**
+     * @param integer $img_h
+     */
+    public function setImg_H(string $img_h): self
+    {
+        $this->img_h = $img_h;
+
+        return $this;
+    }
+
+    /**
+     * @return integer
+     */
+    public function getRed_W(): ?string
+    {
+        return $this->red_w;
+    }
+
+    /**
+     * @param integer $red_w
+     */
+    public function setRed_W(string $red_w): self
+    {
+        $this->red_w = $red_w;
+
+        return $this;
+    }
+
+    /**
+     * @return integer
+     */
+    public function getRed_H(): ?string
+    {
+        return $this->red_h;
+    }
+
+    /**
+     * @param integer $red_h
+     */
+    public function setRed_H(string $red_h): self
+    {
+        $this->red_h = $red_h;
 
         return $this;
     }

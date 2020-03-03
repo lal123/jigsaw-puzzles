@@ -50,4 +50,5 @@ Invalid credentials.: Identifiants invalides
 Username could not be found.: Ce nom de joueur n'existe pas
 
 puzzle.edit.update.label: Mettre à jour
+puzzle.edit.global.error: Des erreurs
 puzzle.edit.keywords.error: Une erreur

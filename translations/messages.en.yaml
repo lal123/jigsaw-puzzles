@@ -47,3 +47,7 @@ player.update.title: Your account
 player.update.success: Your account has been updated
 player.delete.title: Delete account
 Invalid credentials.: Invalid identifiers
+
+puzzle.edit.update.label: Update
+puzzle.edit.global.error: Some errors
+puzzle.edit.keywords.error: An error

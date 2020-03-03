@@ -38,7 +38,7 @@ class PuzzlesController extends AbstractController
         $limit = 10;
         $first = ($page - 1) * $limit;
 
-        $puzzles = $repository->findLocaleExt("'%', '@'", $locale, $first, $limit, $query, $count);
+        $puzzles = $repository->findLocaleExt("'%', '@', 'P'", $locale, $first, $limit, $query, $count);
 
         $pages = ceil($count / $limit);
 
@@ -136,22 +136,21 @@ class PuzzlesController extends AbstractController
                 $em->flush();
                 
                 if($request->isXmlHttpRequest()) {
-                    $response = new Response("page.call('{$session->get('listUrl')}')");
-                    $response->headers->set('Content-Type','text/javascript');
+                    $response = new Response("page.call('{$session->get('listUrl')}');");
+                    $response->headers->set('Content-Type', 'text/javascript');
                     return $response;
                 } else {
                     return $this->redirect($session->get('listUrl'));               
                 }
 
             } else {
-                $form->addError(new FormError($translator->trans('puzzle.edit.keywords.error')));
+                $form->addError(new FormError($translator->trans('puzzle.edit.global.error')));
                 if($request->isXmlHttpRequest()) {
                     $data =  $this->renderView('puzzles/edit.content.html.twig', array(
                         'form' => $form->createView(),
                         'puzzle' => $puzzle,
-                        'locale_versions' => $urlTranslator->translate($request, $urlGenerator)
                     ));
-                    $response = new Response("\$('#central-content').html(decodeURIComponent('" . rawurlencode($data). "'))");
+                    $response = new Response("try{\n\$('#central-content').html(decodeURIComponent('" . rawurlencode($data). "'));\n}catch(e){\nconsole.log(e);\n}\n");
                     $response->headers->set('Content-Type','text/javascript');
                     return $response;
                 }

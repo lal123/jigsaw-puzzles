@@ -57,8 +57,8 @@ class PuzzleRepository extends ServiceEntityRepository
         switch($partner) {
         	case '%':
 	        	$sql = "
-		        	REPLACE INTO `jigsaw-puzzles`.puzzles (id, title, partner, locale, filename, keywords, created, updated, published)
-		            SELECT p.puzz_id, CONCAT('{\"en\": \"', REPLACE(p.title_en, '\"','\\\\\"'), '\", \"fr\": \"', REPLACE(p.title, '\"','\\\\\"'), '\"}'), :partner, :locale, p.filename, p.keywords, p.pub_date, p.pub_date, p.pub_date 
+		        	REPLACE INTO `jigsaw-puzzles`.puzzles (id, title, partner, locale, filename, keywords, img_w, img_h, red_w, red_h, created, updated, published)
+		            SELECT p.puzz_id, CONCAT('{\"en\": \"', REPLACE(p.title_en, '\"','\\\\\"'), '\", \"fr\": \"', REPLACE(p.title, '\"','\\\\\"'), '\"}'), :partner, :locale, p.filename, p.keywords, p.img_w, p.img_h, p.red_w, p.red_h, p.pub_date, p.pub_date, p.pub_date 
 		            	FROM jpuzzles.puzzles p
 		            WHERE 1
 		            	AND ISNULL(p.partner)
@@ -68,8 +68,8 @@ class PuzzleRepository extends ServiceEntityRepository
 		        break;
 		    case '@':
 	        	$sql = "
-		        	REPLACE INTO `jigsaw-puzzles`.puzzles (id, title, partner, locale, filename, keywords, created, updated, published)
-		            SELECT p.puzz_id, CONCAT('{\"', :locale, '\": \"', REPLACE(p.title, '\"','\\\\\"'), '\"}'), :partner, :locale, p.filename, p.keywords, p.pub_date, p.pub_date, v.validato 
+		        	REPLACE INTO `jigsaw-puzzles`.puzzles (id, title, partner, locale, filename, keywords, img_w, img_h, red_w, red_h, created, updated, published)
+		            SELECT p.puzz_id, CONCAT('{\"', :locale, '\": \"', REPLACE(p.title, '\"','\\\\\"'), '\"}'), :partner, :locale, p.filename, p.keywords, p.img_w, p.img_h, p.red_w, p.red_h, p.pub_date, p.pub_date, v.validato 
 		            	FROM jpuzzles.puzzles p
 		            	JOIN jpuzzles.validation v ON p.puzz_id = v.puzz_id
 		            WHERE 1
@@ -82,8 +82,8 @@ class PuzzleRepository extends ServiceEntityRepository
 		        break;
         	default:
 	        	$sql = "
-		        	REPLACE INTO `jigsaw-puzzles`.puzzles (id, title, partner, locale, filename, keywords, created, updated, published)
-		            SELECT p.puzz_id, CONCAT('{\"', :locale, '\": \"', REPLACE(p.title, '\"','\\\\\"'), '\"}'), :partner, :locale, p.filename, p.keywords, p.pub_date, p.pub_date, p.pub_date 
+		        	REPLACE INTO `jigsaw-puzzles`.puzzles (id, title, partner, locale, filename, keywords, img_w, img_h, red_w, red_h, created, updated, published)
+		            SELECT p.puzz_id, CONCAT('{\"', :locale, '\": \"', REPLACE(p.title, '\"','\\\\\"'), '\"}'), :partner, :locale, p.filename, p.keywords, p.img_w, p.img_h, p.red_w, p.red_h, p.pub_date, p.pub_date, p.pub_date 
 		            	FROM jpuzzles.puzzles p
 		            WHERE 1
 		            	AND p.partner = :partner
