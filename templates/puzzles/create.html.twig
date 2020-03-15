@@ -5,19 +5,5 @@
 {% block title %}Create a Puzzle{% endblock %}
 
 {% block body %}
-        <div class="container">
-            <h1>{% trans %}Create a puzzle{% endtrans %}</h1>
-        </div>
-        <div class="container">
-            <div class="row">
-                {{ form_start(form, {
-                    'attr': {
-                        'novalidate': 'novalidate',
-                        'class': 'col-lg-5' 
-                        }
-                    })
-                }}
-                {{ form_end(form) }}
-            </div>
-        </div>
+        {% include 'puzzles/create.content.html.twig' %}
 {% endblock %}

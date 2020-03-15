@@ -20,10 +20,10 @@ class AdminController extends AbstractController
         $repository = $this->getDoctrine()->getRepository(Puzzle::class);
 
         $count = [];
-        $count['L']['en'] = $repository->migratePuzzles('%', '*', 30);
-        $count['@']['en'] = $repository->migratePuzzles('@', 'en', 30);
-        $count['@']['fr'] = $repository->migratePuzzles('@', 'fr', 30);
-        $count['P']['fr'] = $repository->migratePuzzles('P', 'fr', 30);
+        $count['L']['en'] = $repository->migratePuzzles('%', '*', 120);
+        $count['@']['en'] = $repository->migratePuzzles('@', 'en', 120);
+        $count['@']['fr'] = $repository->migratePuzzles('@', 'fr', 120);
+        $count['P']['fr'] = $repository->migratePuzzles('P', 'fr', 120);
 
         return $this->render('admin/puzzles_migration.html.twig', array(
             'count' => $count,

@@ -49,11 +49,24 @@ class HomeController extends AbstractController
      */
     public function home(Request $request, UrlGeneratorInterface $urlGenerator, UrlTranslator $urlTranslator, ComplexObject $foo1, Environment $twig)
     {
-        $template = $request->isXmlHttpRequest() ? 'homepage.content.html.twig' : 'homepage.html.twig';
-
-        return $this->render($template, array(
-            'locale_versions' => $urlTranslator->translate($request, $urlGenerator)
-        ));
+        if($request->isXmlHttpRequest()) {
+            $data = $this->renderView('homepage.content.html.twig', [
+                'locale_versions' => $urlTranslator->translate($request, $urlGenerator)
+            ]);
+            $response = new Response("
+                try{
+                    \$('#central-content').html(decodeURIComponent('" . rawurlencode($data). "'));
+                } catch(e) {
+                    console.log('e', e);
+                }
+                ");
+            $response->headers->set('Content-Type','text/javascript');
+            return $response;
+        } else {
+            return $this->render('homepage.html.twig', [
+                'locale_versions' => $urlTranslator->translate($request, $urlGenerator)
+            ]);
+        }
     }
 
 }

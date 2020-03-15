@@ -5,12 +5,15 @@
             <div class="row">
                 {{ form_start(form, {
                     'attr': {
-                        'onsubmit': "return puzzles.edit_modal(this.action, {'puzzle_create[title]': document.getElementById('puzzle_create_title').value, 'puzzle_create[keywords]': document.getElementById('puzzle_create_keywords').value, 'puzzle_create[_token]': document.getElementById('puzzle_create__token').value}, function(){ page.from_hash(document.location.hash); }); return false;",
-                        'novalidate': 'novalidate',
+                        'onsubmit': "return page.post2(this); return false;",
                         'class': 'col-lg-5'
                         }
                     })
                 }}
+                    {% for locale, title in puzzle.getLocaleTitles %}
+                        <label for="puzzle_title_{{ locale }}">Title{% if puzzle.getLocaleTitles|length > 1 %} [{{ locale }}]{% endif %}</label>
+                        <input type="text" class="form-control" name="title[{{ locale }}]" id="puzzle_title_{{ locale }}" value="{{ title }}" />
+                    {% endfor %}
                 {{ form_end(form) }}
             </div>
         </div>

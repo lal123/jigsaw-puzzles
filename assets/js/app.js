@@ -17,11 +17,13 @@ page = {
     
     locale: $('html').attr('lang'),
     lastYPos: {},
+    base: '#',
 
-    call: function(h) {
+    call: function(h, m) {
         console.log('call', h);
         var yPos = $(document).scrollTop();
         if(yPos != 0) page.lastYPos[document.location.href] = yPos;
+        if(m) page.base = '/' + document.location.hash.substring(1);
         document.location.href = '/#' + h.substring(1);
         return false;
     },
@@ -71,13 +73,21 @@ page = {
         return true;
     },
 
+    from_hash2: function(s) {
+        if(s.length > 1) {
+            h = s.substring(1);
+            return page.load2(h);
+        }
+        return true;
+    },
+
     load: function(path, target, refresh) {
         $.ajax({
             type: 'get',
             url: '/' + path,
             success: function (data) {
                 $('#' + target).html(data);
-                console.log(page.lastYPos, document.location.href)
+                /*console.log(page.lastYPos, document.location.href)*/
                 if(page.lastYPos && page.lastYPos[document.location.href]) {
                     $(document).scrollTop(page.lastYPos[document.location.href]);
                     page.lastYPos[document.location.href] = 0;
@@ -88,6 +98,17 @@ page = {
                     page.menu_sync('/' + path);
                 }
                 $('.modal-backdrop').hide();
+            }
+        });
+        return false;
+    },
+
+    load2: function(path) {
+        $.ajax({
+            type: 'get',
+            url: '/' + path,
+            success: function (data) {
+                eval(data);
             }
         });
         return false;
@@ -124,18 +145,20 @@ puzzles = {
             url: post_url,
             data: post_data,
             success: function (data) {
-                $('#modal-body').html(data);
-                $('#puzzleEditModal').modal("show");
-                callback();
+                /*$('#modal-body').html(data);*/
+                eval(data);
+                /*$('#puzzleEditModal').modal('show');*/
+                if(callback) callback();
             }
         });
         return false;        
     }
+
 }
 
 $(document).ready(function () {
     if(document.location.hash.length > 1) {
-        page.from_hash(document.location.hash);
+        page.from_hash2(document.location.hash);
     } else {
         var pathname = document.location.pathname;
         if(pathname == '/') pathname = page.locale == 'fr' ? '/accueil' : '/home';
@@ -144,7 +167,7 @@ $(document).ready(function () {
 });
 
 $(window).on('hashchange', function() {
-    return page.from_hash(document.location.hash);
+    return page.from_hash2(document.location.hash);
 });
 
 $(window).scroll(function(){

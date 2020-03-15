@@ -81,6 +81,7 @@ body {
 	margin-left: 0px;
 	margin-right: 0px;
 }
+
 .navbar-brand {
 	font-family: saginaw_bold;
 	font-size: 26px !important;
@@ -112,3 +113,11 @@ body {
 span.d-block > span.form-error-icon.badge.badge-danger {
 	display: none;
 }
+
+/* PUZZLE LIST >> */
+#central-content div.row.puzzle-list {
+	text-align: center;
+}
+#central-content div.row.puzzle-list > div.col {
+}
+/* << PUZZLE LIST */

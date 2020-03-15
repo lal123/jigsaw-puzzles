@@ -29,29 +29,47 @@ class PuzzlesController extends AbstractController
 
         $session = $request->getSession();
 
-        $session->set('listUrl', $request->getRequestUri());
+        $session->set('listUrl', substr($request->getRequestUri(), 1));
 
         $query = $request->get('query');
         
         $repository = $this->getDoctrine()->getRepository(Puzzle::class);
 
-        $limit = 10;
+        $limit = 60;
         $first = ($page - 1) * $limit;
 
         $puzzles = $repository->findLocaleExt("'%', '@', 'P'", $locale, $first, $limit, $query, $count);
 
         $pages = ceil($count / $limit);
 
-        $template = $request->isXmlHttpRequest() ? 'puzzles/list.content.html.twig' : 'puzzles/list.html.twig';
-        
-        return $this->render($template, array(
-            'count' => $count,
-            'pages' => $pages,
-            'page' => $page,
-            'query' => $query,
-            'puzzles' => $puzzles,
-            'locale_versions' => $urlTranslator->translate($request, $urlGenerator)
-        ));
+        if($request->isXmlHttpRequest()) {
+            $data = $this->renderView('puzzles/list.content.html.twig', [
+                'count' => $count,
+                'pages' => $pages,
+                'page' => $page,
+                'query' => $query,
+                'puzzles' => $puzzles,
+                'locale_versions' => $urlTranslator->translate($request, $urlGenerator)
+            ]);
+            $response = new Response("
+                try{
+                    \$('#central-content').html(decodeURIComponent('" . rawurlencode($data). "'));
+                } catch(e) {
+                    console.log('e', e);
+                }
+                ");
+            $response->headers->set('Content-Type','text/javascript');
+            return $response;
+        } else {
+            return $this->render('puzzles/list.html.twig', [
+                'count' => $count,
+                'pages' => $pages,
+                'page' => $page,
+                'query' => $query,
+                'puzzles' => $puzzles,
+                'locale_versions' => $urlTranslator->translate($request, $urlGenerator)
+            ]);
+        }
     }
 
     /**
@@ -92,7 +110,9 @@ class PuzzlesController extends AbstractController
             return $this->redirectToRoute('your_puzzles_list');
         }
 
-        return $this->render('puzzles/create.html.twig', array(
+        $template = $request->isXmlHttpRequest() ? 'puzzles/create.content.html.twig' : 'puzzles/create.html.twig';
+
+        return $this->render($template, array(
             'form' => $form->createView(),
             'locale_versions' => $urlTranslator->translate($request, $urlGenerator)
         ));
@@ -136,7 +156,7 @@ class PuzzlesController extends AbstractController
                 $em->flush();
                 
                 if($request->isXmlHttpRequest()) {
-                    $response = new Response("page.call('{$session->get('listUrl')}');");
+                    $response = new Response("page.call('/{$session->get('listUrl')}');");
                     $response->headers->set('Content-Type', 'text/javascript');
                     return $response;
                 } else {
@@ -173,23 +193,104 @@ class PuzzlesController extends AbstractController
      *      "fr": "/vos-puzzles/editer-modal/{id<\d+>}"
      * }, name="your_puzzles_edit_modal")
      */
-    public function edit_modal(Request $request, Puzzle $puzzle)
+    public function edit_modal(Request $request, Puzzle $puzzle, UrlGeneratorInterface $urlGenerator, UrlTranslator $urlTranslator, TranslatorInterface $translator)
     {
-        $form = $this->createForm(PuzzleCreateType::class, $puzzle, [
-            'action' => $request->getUri()
+        $locale = $request->getLocale();
+
+        $session = $request->getSession();
+
+        $form = $this->createForm(PuzzleEditType::class, $puzzle, [
+            'action' => $request->getUri(),
         ]);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
 
-            //return $this->redirectToRoute('your_puzzles_list');
+            $em = $this->getDoctrine()->getManager();
+
+            $puzzle->setTitle(json_encode($request->get('title')));
+            
+            $keywords = $form->get('keywords')->getData();
+            if(strlen($keywords) < 5) {
+                $form->get('keywords')->addError(new FormError($translator->trans('puzzle.edit.keywords.error')));
+            } else {
+                $puzzle->setKeywords($keywords);
+            }
+
+            if(0 === count($form->getErrors(true, true))) {
+                $now = new \DateTime();
+                $puzzle->setUpdated($now);
+
+                $em->flush();
+                
+                if($request->isXmlHttpRequest()) {
+                    $response = new Response("
+                        try {
+                            /*\$('#puzzleEditModal').modal('hide');*/
+                            \$('.modal-backdrop').hide();
+                            \$('body').removeClass('modal-open');
+                            \$('body').css({'padding-right': '0px'});
+                            \$('#top-navbar').css({'padding-right': '0px'});
+                            page.call(page.base);
+                        } catch(e) {
+                            console.log('e', e);
+                        }
+                    ");
+                    $response->headers->set('Content-Type', 'text/javascript');
+                    return $response;
+                } else {
+                    /*return $this->redirect($base);*/
+                }
+            } else {
+                $form->addError(new FormError($translator->trans('puzzle.edit.global.error')));
+                if($request->isXmlHttpRequest()) {
+                    $data = $this->renderView('puzzles/edit_modal.html.twig', [
+                        'form' => $form->createView(),
+                        'puzzle' => $puzzle,
+                    ]);
+                    $response = new Response("
+                        try{
+                            \$('#modal-body').html(decodeURIComponent('" . rawurlencode($data). "'));
+                        } catch(e) {
+                            console.log('e', e);
+                        }
+                    ");
+                    $response->headers->set('Content-Type','text/javascript');
+                    return $response;
+                } else {
+                    return $this->render('puzzles/edit_modal.html.twig', [
+                        'form' => $form->createView(),
+                        'puzzle' => $puzzle,
+                    ]);
+                }
+            }
         }
 
-        return $this->render('puzzles/edit_modal.html.twig', array(
-            'form' => $form->createView()
-        ));
+        if($request->isXmlHttpRequest()) {
+            $data = $this->renderView('puzzles/edit_modal.html.twig', [
+                'form' => $form->createView(),
+                'puzzle' => $puzzle,
+            ]);
+            $response = new Response("
+                try{
+                    \$('#modal-body').html(decodeURIComponent('" . rawurlencode($data). "'));
+                    \$('#puzzleEditModal').modal('show');
+                    \$('#puzzleEditModal').on('hidden.bs.modal', function (e) {
+                        page.call(page.base);
+                    });
+                } catch(e) {
+                    console.log('e', e);
+                }
+            ");
+            $response->headers->set('Content-Type','text/javascript');
+            return $response;
+        } else {
+            return $this->render('puzzles/edit_modal.html.twig', [
+                'form' => $form->createView(),
+                'puzzle' => $puzzle,
+            ]);
+        }
     }
 
     /**
@@ -232,10 +333,14 @@ class PuzzlesController extends AbstractController
         imagejpeg($dst_img);
         $image = ob_get_clean();
 
+        $cache_limiter = 3 * 30 * 86400;
+
         $response = new Response();
         $disposition = $response->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_INLINE, $filename);
         $response->headers->set('Content-Disposition', $disposition);
         $response->headers->set('Content-Type', 'image/jpeg');
+        $response->headers->set('Expires', gmdate("D, d M Y H:i:s", time() + $cache_limiter) . " GMT");
+        $response->headers->set('Cache-Control', 'max-age=' . $cache_limiter);
         $response->setContent($image);
 
         return $response;

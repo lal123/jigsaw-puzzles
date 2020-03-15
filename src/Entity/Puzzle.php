@@ -103,6 +103,10 @@ class Puzzle
      */
     public function getLocaleTitles(): ?array
     {
+        if(!is_array(json_decode($this->title, true))) {
+            return ['fr' => '?', 'en' => '?'];
+        }
+
         $localeTitles = json_decode($this->title, true);
 
         return $localeTitles;
