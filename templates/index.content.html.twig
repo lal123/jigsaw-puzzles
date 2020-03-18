@@ -5,3 +5,10 @@
     <div class="row">
     </div>
 </div>
+<script>
+if(document.location.hash.length > 1) {
+    page.from_hash2(document.location.hash);
+} else {
+    page.call('{{ path('homepage') }}', true);
+}
+</script>

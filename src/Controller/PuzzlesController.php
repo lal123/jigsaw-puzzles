@@ -276,6 +276,10 @@ class PuzzlesController extends AbstractController
                 try{
                     \$('#modal-body').html(decodeURIComponent('" . rawurlencode($data). "'));
                     \$('#puzzleEditModal').modal('show');
+                    if(page.base == '#') {
+                        page.base = '/{$session->get('listUrl')}';
+                        page.load2('{$session->get('listUrl')}');
+                    }
                     \$('#puzzleEditModal').on('hidden.bs.modal', function (e) {
                         page.call(page.base);
                     });

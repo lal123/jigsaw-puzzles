@@ -156,7 +156,7 @@ puzzles = {
 
 }
 
-$(document).ready(function () {
+/*$(document).ready(function () {
     if(document.location.hash.length > 1) {
         page.from_hash2(document.location.hash);
     } else {
@@ -164,9 +164,10 @@ $(document).ready(function () {
         if(pathname == '/') pathname = page.locale == 'fr' ? '/accueil' : '/home';
         page.call(pathname);
     }
-});
+});*/
 
 $(window).on('hashchange', function() {
+    console.log('hashchange');
     return page.from_hash2(document.location.hash);
 });
 
