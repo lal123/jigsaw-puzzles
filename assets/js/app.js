@@ -17,7 +17,7 @@ page = {
     
     locale: $('html').attr('lang'),
     lastYPos: {},
-    base: '#',
+    base: '/',
 
     call: function(h, m) {
         console.log('call', h);
@@ -50,6 +50,7 @@ page = {
     },
 
     post2: function(form) {
+        console.log('post2', form);
         var path = form.action;
         $.ajax({
             type: 'post',
@@ -66,6 +67,7 @@ page = {
     },
 
     from_hash: function(s) {
+        console.log('from_hash', s);
         if(s.length > 1) {
             h = s.substring(1);
             return page.load(h, 'central-content');
@@ -74,14 +76,16 @@ page = {
     },
 
     from_hash2: function(s) {
+        console.log('from_hash2', s);
         if(s.length > 1) {
             h = s.substring(1);
-            return page.load2(h);
+            return page.load2('/' + h);
         }
         return true;
     },
 
     load: function(path, target, refresh) {
+        console.log('load', path, target, refresh);
         $.ajax({
             type: 'get',
             url: '/' + path,
@@ -104,9 +108,10 @@ page = {
     },
 
     load2: function(path) {
+        console.log('load2', path);
         $.ajax({
             type: 'get',
-            url: '/' + path,
+            url: path,
             success: function (data) {
                 eval(data);
             }

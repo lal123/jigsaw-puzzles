@@ -1,9 +1,7 @@
     {{ form_start(form, {
         'attr': {
-            'action': path('app_edit_account'),
-            'onsubmit': "return page.post(this, 'central-content'); return false;",
-                'invalidate': 'invalidate',
-                'class': 'col-lg-5' 
+            'onsubmit': "return page.post2(this); return false;",
+            'class': 'col-lg-5'
             }
         })
     }}

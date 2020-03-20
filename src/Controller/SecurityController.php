@@ -39,13 +39,28 @@ class SecurityController extends AbstractController
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
 
-        $template = $request->isXmlHttpRequest() ? 'security/login.content.html.twig' : 'security/login.html.twig';
-
-        return $this->render($template, [
-        	'last_username' => $lastUsername,
-        	'error' => $error,
-            'locale_versions' => $urlTranslator->translate($request, $urlGenerator),
-        ]);
+        if($request->isXmlHttpRequest()) {
+            $data = $this->renderView('security/login.content.html.twig', [
+                'last_username' => $lastUsername,
+                'error' => $error,
+                'locale_versions' => $urlTranslator->translate($request, $urlGenerator),
+            ]);
+            $response = new Response("
+                try{
+                    \$('#central-content').html(decodeURIComponent('" . rawurlencode($data). "'));
+                } catch(e) {
+                    console.log('e', e);
+                }
+            ");
+            $response->headers->set('Content-Type','text/javascript');
+            return $response;
+        } else {
+            return $this->render('security/login.html.twig', [
+            	'last_username' => $lastUsername,
+            	'error' => $error,
+                'locale_versions' => $urlTranslator->translate($request, $urlGenerator),
+            ]);
+        }
     }
 
     /**
@@ -69,7 +84,9 @@ class SecurityController extends AbstractController
     {
         $user = new User();
 
-        $form = $this->createForm(UserRegisterType::class, $user);
+        $form = $this->createForm(UserRegisterType::class, $user, [
+            'action' => $request->getUri(),
+        ]);
 
         $form->handleRequest($request);
 
@@ -114,16 +131,42 @@ class SecurityController extends AbstractController
 	            $em->persist($user);
 	            $em->flush();
 
-	            return $this->redirectToRoute('homepage');
+                if($request->isXmlHttpRequest()) {
+                    $response = new Response("
+                        try {
+                            page.call('{$this->generateUrl('homepage', [], true)}');
+                        } catch(e) {
+                            console.log('e', e);
+                        }
+                    ");
+                    $response->headers->set('Content-Type', 'text/javascript');
+                    return $response;
+                } else {
+    	            return $this->redirectToRoute('homepage');
+                }
 	        }
         }
 
-        $template = $request->isXmlHttpRequest() ? 'security/register.content.html.twig' : 'security/register.html.twig';
-
-        return $this->render($template, [
-        	'form' => $form->createView(),
-            'locale_versions' => $urlTranslator->translate($request, $urlGenerator),
-        ]);
+        if($request->isXmlHttpRequest()) {
+            $data = $this->renderView('security/register.content.html.twig', [
+                'form' => $form->createView(),
+                'locale_versions' => $urlTranslator->translate($request, $urlGenerator),
+            ]);
+            $response = new Response("
+                try{
+                    \$('#central-content').html(decodeURIComponent('" . rawurlencode($data). "'));
+                } catch(e) {
+                    console.log('e', e);
+                }
+            ");
+            $response->headers->set('Content-Type','text/javascript');
+            return $response;
+        } else {
+            return $this->render('security/register.html.twig', [
+            	'form' => $form->createView(),
+                'locale_versions' => $urlTranslator->translate($request, $urlGenerator),
+            ]);
+        }
     }
 
     /**
@@ -138,7 +181,9 @@ class SecurityController extends AbstractController
 
 		$user = clone $_user;
 
-        $form = $this->createForm(UserAccountType::class, $user);
+        $form = $this->createForm(UserAccountType::class, $user, [
+            'action' => $request->getUri(),
+        ]);
 
         $form->handleRequest($request);
 
@@ -189,12 +234,26 @@ class SecurityController extends AbstractController
             }
         }
 
-        $template = $request->isXmlHttpRequest() ? 'security/account.content.html.twig' : 'security/account.html.twig';
-
-        return $this->render($template, [
-        	'form' => $form->createView(),
-            'locale_versions' => $urlTranslator->translate($request, $urlGenerator),
-        ]);
+        if($request->isXmlHttpRequest()) {
+            $data = $this->renderView('security/account.content.html.twig', [
+                'form' => $form->createView(),
+                'locale_versions' => $urlTranslator->translate($request, $urlGenerator),
+            ]);
+            $response = new Response("
+                try{
+                    \$('#central-content').html(decodeURIComponent('" . rawurlencode($data). "'));
+                } catch(e) {
+                    console.log('e', e);
+                }
+            ");
+            $response->headers->set('Content-Type','text/javascript');
+            return $response;
+        } else {
+            return $this->render('security/account.html.twig', [
+            	'form' => $form->createView(),
+                'locale_versions' => $urlTranslator->translate($request, $urlGenerator),
+            ]);
+        }
     }
 
     /**

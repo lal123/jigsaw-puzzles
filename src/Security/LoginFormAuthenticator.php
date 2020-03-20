@@ -6,6 +6,7 @@ use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -81,12 +82,24 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
-        if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
-            return new RedirectResponse($targetPath);
+        if($request->isXmlHttpRequest()) {
+            $response = new Response("
+                try{
+                    page.call('{$this->urlGenerator->generate('app_edit_account')}');
+                    page.load_navbar('top-navbar', 'top-navbar');
+                } catch(e) {
+                    console.log('e', e);
+                }
+            ");
+            $response->headers->set('Content-Type','text/javascript');
+            return $response;
+        } else {
+            if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
+                return new RedirectResponse($targetPath);
+            }
+
+            return new RedirectResponse($this->urlGenerator->generate('homepage'));
         }
-
-        return new RedirectResponse($this->urlGenerator->generate('homepage'));
-
         // For example : return new RedirectResponse($this->urlGenerator->generate('some_route'));
         // throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
     }

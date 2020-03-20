@@ -1,4 +1,4 @@
-<form method="post" class="col-lg-5" action="{{ path('app_login') }}" onsubmit="return page.post(this, 'central-content', true); return false;">
+<form method="post" class="col-lg-5" action="{{ path('app_login') }}" onsubmit="return page.post2(this); return false;">
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" />
     {% if error %}
         <div class="alert alert-danger">{% trans %}player.error.login.invalid{% endtrans %}{#{ error.messageKey|trans(error.messageData, 'security') }#}</div>
@@ -17,6 +17,7 @@
             <input type="checkbox" name="_remember_me" /> Remember me
         </label>
     </div>
+    <input type="hidden" name="_target_path" value="{{ path('app_edit_account') }}"/>
     <button class="btn btn-primary" type="submit">
         Sign in
     </button>

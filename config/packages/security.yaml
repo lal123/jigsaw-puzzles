@@ -19,6 +19,12 @@ security:
             guard:
                 authenticators:
                     - App\Security\LoginFormAuthenticator
+            form_login:
+                #login_path: app_login
+                #check_path: app_login
+                #always_use_default_target_path: true
+                #default_target_path: app_edit_account
+                #use_referer: true
             logout:
                 path: app_logout
                 # where to redirect after logout
