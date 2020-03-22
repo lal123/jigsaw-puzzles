@@ -85,7 +85,8 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         if($request->isXmlHttpRequest()) {
             $response = new Response("
                 try{
-                    page.call('{$this->urlGenerator->generate('app_edit_account')}');
+                    /*page.call('{$this->urlGenerator->generate('app_edit_account')}');*/
+                    page.call(page.base);
                     page.load_navbar('top-navbar', 'top-navbar');
                 } catch(e) {
                     console.log('e', e);

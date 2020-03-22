@@ -107,13 +107,18 @@ page = {
         return false;
     },
 
-    load2: function(path) {
-        console.log('load2', path);
+    load2: function(path, refresh) {
+        console.log('load2', path, refresh);
         $.ajax({
             type: 'get',
             url: path,
             success: function (data) {
-                eval(data);
+                if(refresh) { 
+                    page.load_navbar('top-navbar', 'top-navbar');
+                    page.menu_sync(path);
+                } else {
+                    eval(data);
+                }
             }
         });
         return false;

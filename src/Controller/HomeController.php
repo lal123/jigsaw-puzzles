@@ -22,11 +22,24 @@ class HomeController extends AbstractController
     public function index(Request $request, UrlGeneratorInterface $urlGenerator, UrlTranslator $urlTranslator, ComplexObject $foo1, Environment $twig)
     {
 
-        $template = $request->isXmlHttpRequest() ? 'index.content.html.twig' : 'index.html.twig';
-
-        return $this->render($template, array(
-            'locale_versions' => $urlTranslator->translate($request, $urlGenerator)
-        ));
+        if($request->isXmlHttpRequest()) {
+            $data = $this->renderView('index.content.html.twig', [
+                'locale_versions' => $urlTranslator->translate($request, $urlGenerator)
+            ]);
+            $response = new Response("
+                try{
+                    \$('#central-content').html(decodeURIComponent('" . rawurlencode($data). "'));
+                } catch(e) {
+                    console.log('e', e);
+                }
+                ");
+            $response->headers->set('Content-Type','text/javascript');
+            return $response;
+        } else {
+            return $this->render('index.html.twig', [
+                'locale_versions' => $urlTranslator->translate($request, $urlGenerator)
+            ]);
+        }
     }
 
     /**

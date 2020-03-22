@@ -289,7 +289,9 @@ class SecurityController extends AbstractController
 
     	$user = new User();
 
-        $form = $this->createForm(UserForgottenPasswordType::class, $user);
+        $form = $this->createForm(UserForgottenPasswordType::class, $user, [
+            'action' => $request->getUri(),
+        ]);
 
         $form->handleRequest($request);
 
@@ -327,12 +329,26 @@ class SecurityController extends AbstractController
 			}
         }
 
-        $template = $request->isXmlHttpRequest() ? 'security/forgotten_password.content.html.twig' : 'security/forgotten_password.html.twig';
-
-        return $this->render($template, [
-            'form' => $form->createView(),
-            'locale_versions' => $urlTranslator->translate($request, $urlGenerator),
-        ]);
+        if($request->isXmlHttpRequest()) {
+            $data = $this->renderView('security/forgotten_password.content.html.twig', [
+                'form' => $form->createView(),
+                'locale_versions' => $urlTranslator->translate($request, $urlGenerator),
+            ]);
+            $response = new Response("
+                try{
+                    \$('#central-content').html(decodeURIComponent('" . rawurlencode($data). "'));
+                } catch(e) {
+                    console.log('e', e);
+                }
+            ");
+            $response->headers->set('Content-Type','text/javascript');
+            return $response;
+        } else {
+            return $this->render('security/forgotten_password.html.twig', [
+                'form' => $form->createView(),
+                'locale_versions' => $urlTranslator->translate($request, $urlGenerator),
+            ]);
+        }
     }
 
 	/**

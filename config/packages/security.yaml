@@ -20,7 +20,7 @@ security:
                 authenticators:
                     - App\Security\LoginFormAuthenticator
             form_login:
-                #login_path: app_login
+                login_path: app_login
                 #check_path: app_login
                 #always_use_default_target_path: true
                 #default_target_path: app_edit_account
@@ -28,7 +28,7 @@ security:
             logout:
                 path: app_logout
                 # where to redirect after logout
-                # target: app_any_route
+                #target: homepage
 
             remember_me:
                 secret:   '%kernel.secret%'
