@@ -311,36 +311,46 @@ class PuzzlesController extends AbstractController
     }
 
     /**
-     * @Route("/puzzles/preview/{filename<.+>}")
+     * @Route("/puzzles/previews/{filename<.+>}")
      */
     public function preview(Request $request, string $filename)
     {
-        $filepath = $this->getParameter('kernel.project_dir') . '/public/data/puzzles/' . $filename . '.jpg';
-        $filename = basename($filepath);
+        $cachefile_path = $this->getParameter('kernel.project_dir') . '/public/puzzles/previews/' . $filename;
 
-        list($src_width, $src_height, $src_format, $html_code) = getimagesize($filepath);
-        $ratio = $src_width / $src_height;
-        if($ratio > 1.0){
-            $dst_width = 100;
-            $dst_height = intval(100 / $ratio);
-        }else{
-            $dst_width = intval(100 * $ratio);
-            $dst_height = 100;
+        if(file_exists($cachefile_path)) {
+
+            $image = file_get_contents($cache_filepath);
+
+        } else {
+
+            $filepath = $this->getParameter('kernel.project_dir') . '/public/puzzles/images/' . $filename;
+
+            list($src_width, $src_height, $src_format, $html_code) = getimagesize($filepath);
+            $ratio = $src_width / $src_height;
+            if($ratio > 1.0){
+                $dst_width = 100;
+                $dst_height = intval(100 / $ratio);
+            }else{
+                $dst_width = intval(100 * $ratio);
+                $dst_height = 100;
+            }
+            
+            $src_img = @imagecreatefromjpeg($filepath);
+            
+            $dst_img = imagecreatetruecolor($dst_width, $dst_height);
+            imagecopyresampled($dst_img, $src_img, 0, 0, 0, 0, $dst_width, $dst_height, $src_width, $src_height);
+            
+            imagejpeg($dst_img, $cachefile_path);
+
+            ob_start();
+            imagejpeg($dst_img);
+            $image = ob_get_clean();
         }
-        
-        $src_img = @imagecreatefromjpeg($filepath);
-        
-        $dst_img = imagecreatetruecolor($dst_width, $dst_height);
-        imagecopyresampled($dst_img, $src_img, 0, 0, 0, 0, $dst_width, $dst_height, $src_width, $src_height);
-        
-        ob_start();
-        imagejpeg($dst_img);
-        $image = ob_get_clean();
 
         $cache_limiter = 3 * 30 * 86400;
 
         $response = new Response();
-        $disposition = $response->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_INLINE, $filename);
+        $disposition = $response->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_INLINE, basename($filepath));
         $response->headers->set('Content-Disposition', $disposition);
         $response->headers->set('Content-Type', 'image/jpeg');
         $response->headers->set('Expires', gmdate("D, d M Y H:i:s", time() + $cache_limiter) . " GMT");

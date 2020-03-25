@@ -12,6 +12,7 @@
 /node_modules/
 /public/build/
 !/public/build/.htaccess
+/public/puzzles/previews
 npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-bundle ###

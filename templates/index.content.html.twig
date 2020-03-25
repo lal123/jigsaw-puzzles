@@ -7,6 +7,7 @@
 </div>
 <script>
 if(document.location.hash.length > 1) {
+    page.base = '/' + document.location.hash.substring(1);
     page.from_hash2(document.location.hash);
 } else {
     page.call('{{ path('homepage') }}', true);

@@ -28,7 +28,7 @@
             {% for puzzle in puzzles %}
                 <div class="col-lg-2 col-md-3 col-sm-4 col-6" id="{{ 'p_' ~ puzzle.id }}">
                     <div class="title">{{ puzzle.localetitles()[app.request.locale] }}</div>
-                    <div class="preview"><img src="/puzzles/preview/{{ app.request.locale }}/{{ puzzle.filename }}" width="{{ puzzle.red_w }}" height="{{ puzzle.red_h }}" alt="{{ puzzle.localetitles()[app.request.locale] }}" /></div>
+                    <div class="preview"><img src="/puzzles/previews/{{ app.request.locale }}/{{ puzzle.filename }}.jpg" width="{{ puzzle.red_w }}" height="{{ puzzle.red_h }}" alt="{{ puzzle.localetitles()[app.request.locale] }}" /></div>
                     <div class="links">
                         <a href="{{ path('your_puzzles_edit', {id: puzzle.id}, false) }}" onclick="return page.call('{{ path('your_puzzles_edit', {id: puzzle.id}, false) }}'); return false;">Edit</a>
                         | <a class="puzzle_edit_modal" href="{{ path('your_puzzles_edit_modal', {id: puzzle.id}, false) }}" data-toggle="modal" onclick="return page.call('{{ path('your_puzzles_edit_modal', {id: puzzle.id}, false) }}', true); return false;">Edit (m)</a>

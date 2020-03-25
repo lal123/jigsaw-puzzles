@@ -24,7 +24,11 @@ page = {
         var yPos = $(document).scrollTop();
         if(yPos != 0) page.lastYPos[document.location.href] = yPos;
         if(m) page.base = '/' + document.location.hash.substring(1);
-        document.location.href = '/#' + h.substring(1);
+        if((document.location.hash.length > 1) && (document.location.hash.substring(1) == h.substring(1))) {
+            page.load2(h);
+        } else {
+            document.location.href = '/#' + h.substring(1);
+        }
         return false;
     },
 
