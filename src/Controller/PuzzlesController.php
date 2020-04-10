@@ -305,9 +305,9 @@ class PuzzlesController extends AbstractController
                         page.base = '/{$session->get('listUrl')}';
                         page.load2(page.base);
                     }
-                    /*\$('#puzzleEditModal').on('hidden.bs.modal', function (e) {
+                    \$('#puzzleEditModal').on('hidden.bs.modal', function (e) {
                         page.call(page.base);
-                    });*/
+                    });
                 } catch(e) {
                     console.log('e', e);
                 }
