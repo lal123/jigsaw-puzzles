@@ -21,6 +21,6 @@
                 {{ form_end(form) }}
             </div>
             <div class="row">
-                <a href="{{ app.request.session.get('listUrl') }}" onclick="return page.call('{{ app.request.session.get('listUrl') }}'); return false;">Retour</a>
+                <a href="{{ app.request.session.get('listUrl') }}" onclick="return page.call(page.base); return false;">Retour</a>
             </div>
         </div>

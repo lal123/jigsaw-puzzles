@@ -32,7 +32,7 @@ page = {
         return false;
     },
 
-    post: function(form, target, refresh, callback) {
+    /*post: function(form, target, refresh, callback) {
         var path = form.action;
         $.ajax({
             type: 'post',
@@ -51,7 +51,7 @@ page = {
             }
         });
         return false;
-    },
+    },*/
 
     post2: function(form) {
         console.log('post2', form);

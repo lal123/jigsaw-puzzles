@@ -156,7 +156,8 @@ class PuzzlesController extends AbstractController
                 $em->flush();
                 
                 if($request->isXmlHttpRequest()) {
-                    $response = new Response("page.call('/{$session->get('listUrl')}');");
+                    /*$response = new Response("page.call('/{$session->get('listUrl')}');");*/
+                    $response = new Response("page.call(page.base);");
                     $response->headers->set('Content-Type', 'text/javascript');
                     return $response;
                 } else {
@@ -169,8 +170,15 @@ class PuzzlesController extends AbstractController
                     $data =  $this->renderView('puzzles/edit.content.html.twig', array(
                         'form' => $form->createView(),
                         'puzzle' => $puzzle,
+                        'locale_versions' => $urlTranslator->translate($request, $urlGenerator)
                     ));
-                    $response = new Response("try{\n\$('#central-content').html(decodeURIComponent('" . rawurlencode($data). "'));\n}catch(e){\nconsole.log(e);\n}\n");
+                    $response = new Response("
+                        try{
+                            \$('#central-content').html(decodeURIComponent('" . rawurlencode($data). "'));
+                        }catch(e){
+                            console.log(e);
+                        }
+                    ");
                     $response->headers->set('Content-Type','text/javascript');
                     return $response;
                 }
@@ -180,11 +188,28 @@ class PuzzlesController extends AbstractController
 
         $template = $request->isXmlHttpRequest() ? 'puzzles/edit.content.html.twig' : 'puzzles/edit.html.twig';
         
-        return $this->render($template, array(
-            'form' => $form->createView(),
-            'puzzle' => $puzzle,
-            'locale_versions' => $urlTranslator->translate($request, $urlGenerator)
-        ));
+        if($request->isXmlHttpRequest()) {
+            $data = $this->renderView('puzzles/edit.content.html.twig', [
+                'form' => $form->createView(),
+                'puzzle' => $puzzle,
+                'locale_versions' => $urlTranslator->translate($request, $urlGenerator)
+            ]);
+            $response = new Response("
+                try{
+                    \$('#central-content').html(decodeURIComponent('" . rawurlencode($data). "'));
+                } catch(e) {
+                    console.log('e', e);
+                }
+            ");
+            $response->headers->set('Content-Type','text/javascript');
+            return $response;
+        } else {
+            return $this->render('puzzles/edit.html.twig', [
+                'form' => $form->createView(),
+                'puzzle' => $puzzle,
+                'locale_versions' => $urlTranslator->translate($request, $urlGenerator)
+            ]);
+        }
     }
 
     /**
