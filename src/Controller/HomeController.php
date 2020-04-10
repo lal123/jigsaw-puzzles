@@ -47,9 +47,24 @@ class HomeController extends AbstractController
      */
     public function topNavbar(Request $request, UrlGeneratorInterface $urlGenerator, UrlTranslator $urlTranslator)
     {
-        return $this->render('top-navbar.html.twig', array(
-            'locale_versions' => $urlTranslator->translate($request, $urlGenerator)
-        ));
+        if($request->isXmlHttpRequest()) {
+            $data = $this->renderView('top-navbar.html.twig', [
+                'locale_versions' => $urlTranslator->translate($request, $urlGenerator)
+            ]);
+            $response = new Response("
+                try{
+                    \$('#top-navbar').html(decodeURIComponent('" . rawurlencode($data). "'));
+                } catch(e) {
+                    console.log('e', e);
+                }
+                ");
+            $response->headers->set('Content-Type','text/javascript');
+            return $response;
+        } else {
+            return $this->render('top-navbar.html.twig', [
+                'locale_versions' => $urlTranslator->translate($request, $urlGenerator)
+            ]);
+        }
     }
 
     /**

@@ -12,11 +12,12 @@
 /node_modules/
 /public/build/
 !/public/build/.htaccess
-/public/puzzles
-!/public/puzzles/.htaccess
 npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-bundle ###
+
+/public/puzzles
+!/public/puzzles/.htaccess
 
 composer.lock
 up.sh

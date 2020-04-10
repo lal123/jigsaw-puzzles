@@ -41,7 +41,7 @@ page = {
             success: function (data) {
                 $('#' + target).html(data);
                 if(refresh) {
-                    page.load('top-navbar', 'top-navbar', true);
+                    page.load_navbar('top-navbar');
                 } else {
                     page.menu_sync(path);
                 }
@@ -70,14 +70,14 @@ page = {
         return false;
     },
 
-    from_hash: function(s) {
+    /*from_hash: function(s) {
         console.log('from_hash', s);
         if(s.length > 1) {
             h = s.substring(1);
             return page.load(h, 'central-content');
         }
         return true;
-    },
+    },*/
 
     from_hash2: function(s) {
         console.log('from_hash2', s);
@@ -88,20 +88,19 @@ page = {
         return true;
     },
 
-    load: function(path, target, refresh) {
+    /*load: function(path, target, refresh) {
         console.log('load', path, target, refresh);
         $.ajax({
             type: 'get',
             url: '/' + path,
             success: function (data) {
                 $('#' + target).html(data);
-                /*console.log(page.lastYPos, document.location.href)*/
                 if(page.lastYPos && page.lastYPos[document.location.href]) {
                     $(document).scrollTop(page.lastYPos[document.location.href]);
                     page.lastYPos[document.location.href] = 0;
                 }
                 if(refresh) { 
-                    page.load_navbar('top-navbar', 'top-navbar');
+                    page.load_navbar('top-navbar');
                 } else {
                     page.menu_sync('/' + path);
                 }
@@ -109,7 +108,7 @@ page = {
             }
         });
         return false;
-    },
+    },*/
 
     load2: function(path, refresh) {
         console.log('load2', path, refresh);
@@ -118,7 +117,7 @@ page = {
             url: path,
             success: function (data) {
                 if(refresh) { 
-                    page.load_navbar('top-navbar', 'top-navbar');
+                    page.load_navbar('top-navbar');
                     page.menu_sync(path);
                 } else {
                     eval(data);
@@ -128,12 +127,12 @@ page = {
         return false;
     },
 
-    load_navbar: function(path, target) {
+    load_navbar: function(path) {
         $.ajax({
             type: 'get',
             url: '/' + path,
             success: function (data) {
-                $('#' + target).html(data);
+                eval(data);
             }
         });
         return false;
